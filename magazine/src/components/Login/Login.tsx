@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHatWizard } from '@fortawesome/free-solid-svg-icons';
 import './styles/login.css';
 import {signIn} from '../../apiFunctions/apiFunctions';
 import { useHistory } from "react-router-dom";
+import Loading from '../../resources/Loading/Loading';
 
 const Login = (props:any) => {
     const [email, setEmail] = useState("");
@@ -26,7 +25,7 @@ const Login = (props:any) => {
                         setError(true);
                         setErrorMessage(x);
                     }else if (Array.isArray(x)){
-                        localStorage.setItem("08191993", x[0].email)
+                        localStorage.setItem("08191993", x[0].id_user)
                         history.push("creatives/");
                         handleChange(false);
                     }else{
@@ -85,9 +84,7 @@ const Login = (props:any) => {
                             {/*<a href="#">Olvide mi contraseña</a>*/}
                         </p>
                         {loading ?
-                        (<div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                            <FontAwesomeIcon icon={faHatWizard} pulse />
-                        </div>)
+                        (<Loading></Loading>)
                         : null}
                         
                     </div>

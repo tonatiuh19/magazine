@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles/posts.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faPowerOff, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from "react-router-dom";
+import { getPostsbyUser } from '../../apiFunctions/apiFunctions';
+import Loading from '../../resources/Loading/Loading';
 
 const Posts = () => {
+    const [idUser, setIdUser] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [noPosts, setNoPosts] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [newPostStatus, setNewPostStatus] = useState(false);
     const history = useHistory();
 
     const signOff = () =>{
@@ -12,15 +19,30 @@ const Posts = () => {
         history.push("/");
     }
 
+    const getUser = () =>{
+        return Number(localStorage.getItem("08191993"));
+    }
+
+    useEffect(() => {
+        getPostsbyUser(getUser()).then((x) =>{
+            if(x === 0){
+                setNoPosts(true);
+            }else{
+                setPosts(x);
+            }
+
+        }).finally(() => setLoading(false));
+    }, []);
+
     return (
         <div >
             <div className="d-flex" id="wrapper">
 
                 <div className="bg-light border-right " id="sidebar-wrapper">
-                    <div className="sidebar-heading">Publicaciones</div>
+                    <div className="sidebar-heading"><h3>Publicaciones</h3></div>
                     <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> @alias</div>
                     <div className="list-group list-group-flush">
-                        <a href="#" className="list-group-item list-group-item-action bg-light">Mis Posts</a>
+                        <a href="#" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</a>
                         <a href="#" className="list-group-item list-group-item-action bg-light">Mi Perfil</a>
                     </div>
                 </div>
@@ -28,9 +50,34 @@ const Posts = () => {
                 <div id="page-content-wrapper">
 
                 <div className="container-fluid">
-                    <h1 className="mt-4">Simple Sidebar</h1>
-                    <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
-                    <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>. The top navbar is optional, and just for demonstration. Just create an element with the <code>#menu-toggle</code> ID which will toggle the menu when clicked.</p>
+                    {loading ? (<Loading></Loading>) : 
+                        (<>
+                            {newPostStatus ? 
+                                (<div className="float-right"><button className="btn btn-outline-danger" onClick={() => setNewPostStatus(false)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                    
+                                ) 
+                                
+                                : (
+                                <>
+                                    {noPosts ? (
+                                        <div id="outer" className="container">
+                                            <div id="inner" className="row">
+                                                <div className="col-12 text-center">
+                                                    <h4>Aun no tienes posts</h4>
+                                                    <button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button>
+                                                </div>   
+                                            </div>
+                                        </div>
+                                    ): (
+                                        <div>Lista Posts</div>
+                                    )}
+                                </>
+                            )}
+                            
+                        </>)
+                    }
+                    
+                    
                 </div>
                 </div>
 
