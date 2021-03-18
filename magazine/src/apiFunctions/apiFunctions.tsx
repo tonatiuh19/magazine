@@ -34,3 +34,17 @@ export const getPostsbyUser = async (idUser:Number) =>{
         return `😱 Request failed: ${e}`;
     }
 };
+
+export const getPostsTypes = async () =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostsTypes.php',{}
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
