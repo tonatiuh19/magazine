@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 require_once('db_cnn/cnn.php');
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -11,7 +14,7 @@ if($method == 'POST'){
 		$email = $params['email'];
         $pwd = $params['pwd'];
 
-		$sql = "SELECT email, name, last_name, type, active FROM users WHERE email='$email' AND pwd='$pwd' and active=1";
+		$sql = "SELECT email, nombre, apellido, active, id_user, alias FROM creatives WHERE email='$email' AND pwd='$pwd' and active=1";
 		$result = $conn->query($sql);
 		if ($result->num_rows > 0) {
 			//echo 'Hola';

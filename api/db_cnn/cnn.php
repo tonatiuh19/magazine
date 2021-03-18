@@ -2,7 +2,7 @@
 $servername = "mx50.hostgator.mx";
 $username = "alanchat_admin";
 $password = "tonatiuh19";
-$dbname = "alanchat_agus";
+$dbname = "alanchat_agustirri";
 
 global $conn;
 $conn = new mysqli($servername, $username, $password, $dbname);
