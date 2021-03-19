@@ -6,7 +6,7 @@ import { BsFillImageFill, BsTextIndentLeft } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
 import { useHistory } from "react-router-dom";
-import { getPostsbyUser, getPostsTypes } from '../../apiFunctions/apiFunctions';
+import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {Form} from 'react-bootstrap';
 
@@ -94,6 +94,23 @@ const Posts = () => {
         return true;
     }
 
+    const insertPostsTypes = (id_post:number) =>{
+        console.log("id",id_post);
+        let promises = [];       
+        for(let i=1; i<postNewContent.length; i++){
+            if(postNewContent[i].type !== 5){
+                /*promises.push({
+                    id_post: id_post, 
+                    type: postNewContent[i].type, 
+                    content: postNewContent[i].content, 
+                    id: postNewContent[i].id
+                });*/
+                promises.push(insertPostTypes(id_post, postNewContent[i].type, postNewContent[i].content, postNewContent[i].id));
+            }
+        }
+        return promises;
+    };
+
     const publish = (e:any) => {
         e.preventDefault();
         if(!validatePost()){
@@ -101,9 +118,17 @@ const Posts = () => {
             setErrorText('Necesitas completar todos los campos');
         }else{
             setError(false);
-            console.log(title);
-            console.log(category);
-            console.log(postNewContent);
+            setLoading(true);
+            insertPost(getUser(), title, category).then((x) => {
+                Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
+                    for(let key in results){
+                        if(results[key] != 1){
+                            console.log("Error");
+                        }
+                    }
+                    console.log(results);
+                }).finally(() => setLoading(false));
+            });
         }
         
     };
@@ -144,7 +169,15 @@ const Posts = () => {
                 <div id="page-content-wrapper">
 
                 <div className="container-fluid">
-                    {loading ? (<Loading></Loading>) : 
+                    {loading ? (
+                        <div id="outer" className="container">
+                            <div id="inner" className="row">
+                                <div className="col-12 text-center">
+                                    <Loading></Loading>
+                                </div>   
+                            </div>
+                        </div>
+                    ) : 
                         (<>
                             {newPostStatus ? 
                                 (
