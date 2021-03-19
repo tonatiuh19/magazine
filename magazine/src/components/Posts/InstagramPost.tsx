@@ -30,9 +30,7 @@ const InstagramPost = (props:any) => {
             </div>
             {
                 valid ? 
-                    (<div className="alert alert-danger p-1" role="alert">
-                        Esta campo no puede estar vacio
-                    </div>) 
+                    (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) 
                     :  null
             }
         </div>

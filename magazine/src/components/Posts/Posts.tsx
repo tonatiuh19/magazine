@@ -8,7 +8,7 @@ import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
 import { useHistory } from "react-router-dom";
 import { getPostsbyUser, getPostsTypes } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
-import {Form, Button} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 
 import ImagePost from './ImagePost';
 import EditorPost from './EditorPost';
@@ -18,16 +18,18 @@ import TwitterPost from './TwitterPost';
 import FacebookPost from './FacebookPost';
 
 const Posts = () => {
-    const [idUser, setIdUser] = useState(0);
     const [loading, setLoading] = useState(true);
     const [noPosts, setNoPosts] = useState(false);
     const [posts, setPosts] = useState([]);
     const [postsTypes, setPostsTypes] = useState([]);
-    const [postNew, setPostNew] = useState([]);
     const [postNewContent, setPostNewContent] = useState([{}]);
-    const [postValid, setPostValid] = useState(true);
     const [newPostStatus, setNewPostStatus] = useState(false);
-    const [images, setImages] = useState([{}]);
+    const [error, setError] = useState(false);
+    const [errorText, setErrorText] = useState('');
+    const [title, setTitle] = useState('');
+    const [titleError, setTitleError] = useState(false);
+    const [category, setCategory] = useState(0);
+    const [categoryError, setCategoryError] = useState(false);
     const history = useHistory();
 
     const signOff = () =>{
@@ -69,11 +71,49 @@ const Posts = () => {
         setPostNewContent(postNewContent.filter((item:any) => item.id !== id));
     };
 
+    const validatePost = () =>{
+        if(title === ''){
+            setTitleError(true);
+            return false;
+        }else{
+            setTitleError(false);
+        }
+
+        if(category === 0){
+            setCategoryError(true);
+            return false;
+        }else{
+            setCategoryError(false);
+        }
+
+        for (let index = 1; index < postNewContent.length; index++) {
+            if(postNewContent[index].valid === false){
+                return false;
+            }
+        }
+        return true;
+    }
+
     const publish = (e:any) => {
-        //console.log(postNewContent);
         e.preventDefault();
+        if(!validatePost()){
+            setError(true);
+            setErrorText('Necesitas completar todos los campos');
+        }else{
+            setError(false);
+            console.log(title);
+            console.log(category);
+            console.log(postNewContent);
+        }
         
     };
+
+    const cancelPost = () =>{
+        setErrorText('');
+        setPostNewContent([{}]);
+        setError(false);
+        setNewPostStatus(false);
+    }
 
     useEffect(() => {
         getPostsbyUser(getUser()).then((x) =>{
@@ -85,7 +125,6 @@ const Posts = () => {
             }else{
                 setPosts(x);
             }
-
         }).finally(() => setLoading(false));
     }, []);
 
@@ -112,7 +151,7 @@ const Posts = () => {
                                     <div className="container">
                                         <div className="row justify-content-center">
                                             <div className="col-sm-12">
-                                                <div className="float-right"><button className="btn btn-outline-danger" onClick={() => setNewPostStatus(false)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                             </div>
                                             <div className="col-sm-8">
                                                 <Form>
@@ -121,20 +160,23 @@ const Posts = () => {
                                                         <Form.Control 
                                                             type="text" 
                                                             maxLength={115}
+                                                            onChange={e => {setTitle(e.target.value)}}
                                                             placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
                                                         <Form.Text className="text-muted">
                                                         Debe ser menor a 115 caracteres.
                                                         </Form.Text>
+                                                        {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                                                     </Form.Group>
 
                                                     <Form.Group controlId="exampleForm.SelectCustom">
                                                         <Form.Label>¿Que categoría?</Form.Label>
-                                                        <Form.Control as="select" custom>
-                                                            <option value={0}>{"..."}</option>
+                                                        <Form.Control as="select" custom onChange={(e:any) => {setCategory(e.target.value)}}>
+                                                            <option value={category}>...</option>
                                                             {postsTypes.map((x:any, index) => {
                                                                 return (<option key={x.id_post_type} value={x.id_post_type}>{x.name}</option>);
                                                             })}
                                                         </Form.Control>
+                                                        {categoryError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                                                     </Form.Group>
                                                     <label>¿Que quisieras añadir?</label>
                                                     <div className="col-sm-12">
@@ -282,7 +324,9 @@ const Posts = () => {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            {postNewContent.length >= 2 ? (<button className="btn btn-success float-right" onClick={(e) => publish(e)} disabled={postValid}>Publicar</button>) : null}
+                                                            {error ? (<div className="alert alert-danger" role="alert">{errorText}</div>) : null}
+                                                            
+                                                            {postNewContent.length >= 2 ? (<button className="btn btn-success float-right" onClick={(e) => publish(e)}>Publicar</button>) : null}
                                                         </div>        
                                                     </div>
                                                 </Form>

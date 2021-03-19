@@ -1,17 +1,15 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import Login from './components/Login/Login';
 import Science from './components/Science/Science';
-import {Navbar, Nav, Button, Form, FormControl, NavDropdown} from 'react-bootstrap';
+import {Navbar, Nav, Button, Form, FormControl} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
 import Footer from './components/Footer/Footer';
 import Main from './components/Main/Main';
-const history = createBrowserHistory();
 function App() {
-  
+  document.title = 'Agustirri';
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark" fixed="top">
