@@ -6,7 +6,7 @@ import { BsFillImageFill, BsTextIndentLeft } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
 import { useHistory } from "react-router-dom";
-import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes } from '../../apiFunctions/apiFunctions';
+import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {Form} from 'react-bootstrap';
 
@@ -22,7 +22,7 @@ const Posts = () => {
     const [noPosts, setNoPosts] = useState(false);
     const [posts, setPosts] = useState([]);
     const [postsTypes, setPostsTypes] = useState([]);
-    const [postNewContent, setPostNewContent] = useState([{}]);
+    const [postNewContent, setPostNewContent] = useState<any>([{}]);
     const [newPostStatus, setNewPostStatus] = useState(false);
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState('');
@@ -111,6 +111,23 @@ const Posts = () => {
         return promises;
     };
 
+    const insertPostsTypesWithImage = (id_post:number) =>{
+        console.log("id",id_post);
+        let promises = [];       
+        for(let i=1; i<postNewContent.length; i++){
+            if(postNewContent[i].type === 5){
+                /*promises.push({
+                    id_post: id_post, 
+                    type: postNewContent[i].type, 
+                    content: postNewContent[i].content, 
+                    id: postNewContent[i].id
+                });*/
+                promises.push(insertPostTypesWithImage(postNewContent[i].raw, id_post, postNewContent[i].type, postNewContent[i].content, postNewContent[i].id));
+            }
+        }
+        return promises;
+    };
+
     const publish = (e:any) => {
         e.preventDefault();
         if(!validatePost()){
@@ -121,12 +138,11 @@ const Posts = () => {
             setLoading(true);
             insertPost(getUser(), title, category).then((x) => {
                 Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
-                    for(let key in results){
-                        if(results[key] != 1){
-                            console.log("Error");
-                        }
-                    }
                     console.log(results);
+                }).finally(() => setLoading(false));
+                setLoading(true);
+                Promise.all(insertPostsTypesWithImage(x[0].id_post)).then(function (resultss) {
+                    console.log(resultss);
                 }).finally(() => setLoading(false));
             });
         }
@@ -216,7 +232,7 @@ const Posts = () => {
                                                         {renderAdd()}
                                                         <hr></hr>
                                                         <div className="container">
-                                                                {postNewContent.map((x:any, index) =>{
+                                                                {postNewContent.map((x:any, index:number) =>{
                                                                     if(x.type === 6){
                                                                         x.id = index;
                                                                         const handleEditorChange = (content:any) => {
