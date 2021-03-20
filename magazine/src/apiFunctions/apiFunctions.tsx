@@ -88,6 +88,23 @@ export const insertPostTypes = async (idPost:number, type:number, content:string
     }
 };
 
+export const deActivatePost = async (idPost:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/deActivatePost.php',
+            {
+                id_post: idPost,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
 export const insertPostTypesWithImage = async (imageRaw:any, idPost:number, type:number, content:string, order:number) =>{
     //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
 

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import './styles/posts.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPowerOff, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { BsFillImageFill, BsTextIndentLeft } from 'react-icons/bs';
+import { BsFillImageFill, BsTextIndentLeft, BsTrash, BsPencil } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
-import { useHistory } from "react-router-dom";
-import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage } from '../../apiFunctions/apiFunctions';
+import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage, deActivatePost } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
-import {Form} from 'react-bootstrap';
+import {Form, Modal, Button} from 'react-bootstrap';
+import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import ImagePost from './ImagePost';
 import EditorPost from './EditorPost';
@@ -16,6 +16,7 @@ import YoutubePost from './YoutubePost';
 import InstagramPost from './InstagramPost';
 import TwitterPost from './TwitterPost';
 import FacebookPost from './FacebookPost';
+import Profile from './Profile';
 
 const Posts = () => {
     const [loading, setLoading] = useState(true);
@@ -24,6 +25,7 @@ const Posts = () => {
     const [postsTypes, setPostsTypes] = useState([]);
     const [postNewContent, setPostNewContent] = useState<any>([{}]);
     const [newPostStatus, setNewPostStatus] = useState(false);
+    const [editPostStatus, setEditPostStatus] = useState(false);
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [title, setTitle] = useState('');
@@ -31,6 +33,9 @@ const Posts = () => {
     const [category, setCategory] = useState(0);
     const [categoryError, setCategoryError] = useState(false);
     const history = useHistory();
+
+    const [showDelete, setShowDelete] = useState(false);
+    const [deletePostID, setDeletePost] = useState(0);
 
     const signOff = () =>{
         localStorage.clear();
@@ -158,6 +163,41 @@ const Posts = () => {
         setNewPostStatus(false);
     }
 
+    const editPost = (id:number, title:string, type:number) =>{
+        setNewPostStatus(true);
+        setEditPostStatus(true);
+        console.log(id, title, type);
+    }
+
+    const cancelEditPost = () =>{
+        setErrorText('');
+        setPostNewContent([{}]);
+        setError(false);
+        setNewPostStatus(false);
+        setEditPostStatus(false);
+    }
+
+    const deletePost = () =>{
+        setShowDelete(false);
+        setLoading(true);
+        deActivatePost(deletePostID).then(()=>{
+            getPostsbyUser(getUser()).then((x) =>{
+                getPostsTypes().then((y) => {
+                    setPostsTypes(y);
+                });
+                if(x === 0){
+                    setNoPosts(true);
+                }else{
+                    setPosts(x);
+                }
+            }).finally(() => {setLoading(false);});
+        });
+    }
+
+    const handleCloseDelete = () =>{
+        setShowDelete(false);
+    }
+
     useEffect(() => {
         getPostsbyUser(getUser()).then((x) =>{
             getPostsTypes().then((y) => {
@@ -173,14 +213,33 @@ const Posts = () => {
 
     return (
         <div >
+            <Modal
+                show={showDelete}
+                onHide={handleCloseDelete}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>¿Estas seguro?</Modal.Title>
+                </Modal.Header>
+                
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => {handleCloseDelete(); setDeletePost(0);}}>
+                        Cancelar
+                    </Button>
+                    <Button variant="danger" onClick={()=> deletePost()}>Eliminar</Button>
+                </Modal.Footer>
+            </Modal>
             <div className="d-flex" id="wrapper">
 
                 <div className="bg-light border-right " id="sidebar-wrapper">
                     <div className="sidebar-heading"><h3>Publicaciones</h3></div>
                     <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> @alias</div>
                     <div className="list-group list-group-flush">
-                        <a href="#" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</a>
-                        <a href="#" className="list-group-item list-group-item-action bg-light">Mi Perfil</a>
+                        
+                        <Link to="/creatives/" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</Link>
+                        <Link to="/profile/" className="list-group-item list-group-item-action bg-light">Mi Perfil</Link>
+                        
                     </div>
                 </div>
 
@@ -200,6 +259,18 @@ const Posts = () => {
                             {newPostStatus ? 
                                 (
                                     <div className="container">
+                                        {editPostStatus ? (
+                                        <div className="row justify-content-center">
+                                            <div className="col-sm-12">
+                                                <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                            </div>
+                                            <div className="col-sm-8">
+                                                ss
+                                            </div>
+                                        </div>
+                                        ) 
+                                        : 
+                                        (
                                         <div className="row justify-content-center">
                                             <div className="col-sm-12">
                                                 <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
@@ -371,7 +442,7 @@ const Posts = () => {
                                                                         );
                                                                     }
                                                                 })}
-                                                           
+                                                        
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -384,6 +455,8 @@ const Posts = () => {
                                                 </Form>
                                             </div>
                                         </div>
+                                        )}
+                                        
                                     </div>
                                 ) 
                                 : (
@@ -398,7 +471,42 @@ const Posts = () => {
                                             </div>
                                         </div>
                                     ): (
-                                        <div>Lista Posts</div>
+                                        <div className="container">
+                                            <div className="row">
+                                                <div className="col-sm-12">
+                                                    <div className="float-right"><button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button></div>
+                                                </div>
+                                                <div className="col-sm-12">
+                                                    <table className="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Titulo</th>
+                                                                <th scope="col">Tipo</th>
+                                                                <th scope="col">Fecha</th>
+                                                                <th scope="col">Editar</th>
+                                                                <th scope="col">Eliminar</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {
+                                                                posts.map((x:any, index) =>{
+                                                                    return (<tr key={index}>
+                                                                        <th scope="row">{x.id_post}</th>
+                                                                        <td>{x.titulo}</td>
+                                                                        <td>{x.name}</td>
+                                                                        <td>{x.date_created}</td>
+                                                                        <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>
+                                                                        <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
+                                                                      </tr>);
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
                                 </>
                             )}

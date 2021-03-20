@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
 import Footer from './components/Footer/Footer';
 import Main from './components/Main/Main';
+import Profile from './components/Posts/Profile';
 function App() {
   document.title = 'Agustirri';
   return (
@@ -30,6 +31,7 @@ function App() {
           <Switch>
             <Route exact path='/' component={Main} />
             <Route path="/creatives" component={Posts} />
+            <Route path="/profile" component={Profile} />
             <Route path="/ciencia" component={Science} />
           </Switch>    
         </Router>

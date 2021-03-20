@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 const ImagePost = (props:any) => {
-    const [image, setImage] = useState({ preview: "", raw: "" });
+    const [image, setImage] = useState({ raw: "" });
     const [productImage, setProductImage] = useState('');
     const [errorImage, setErrorImage] = useState(true);
     const [errorImageText, setErrorImageText] = useState('Necesitas incluir una imagen');
@@ -11,9 +11,9 @@ const ImagePost = (props:any) => {
     const handleChangeImage = (e:any) => {
         if(validateImage(e.target.files[0])){
             if (e.target.files.length) {
-                setURL(URL.createObjectURL(e.target.files[0].name));
+                setURL(URL.createObjectURL(e.target.files[0]));
                 setImage({
-                  preview: url,
+                  
                   raw: e.target.files[0]
                 });
                 setErrorImage(false);
@@ -42,11 +42,11 @@ const ImagePost = (props:any) => {
 
     return (
         <div className="card text-center" style={{width: "28rem"}}>
-            <label htmlFor="upload-button">
+            <label htmlFor={props.order}>
                 {url ? (
                     <>
-                    {/*<img src={url} width="300" height="300" />*/}
-                    <h3>{url}</h3>
+                    {<img src={url} width="300" />}
+                    {/*<h3>{url}</h3>*/}
                     </>
                 ) : 
                 (
@@ -60,7 +60,7 @@ const ImagePost = (props:any) => {
             <input
                 type="file"
                 accept="image/*"
-                id="upload-button"
+                id={props.order}
                 style={{ display: "none" }}
                 onChange={handleChangeImage}
             />
