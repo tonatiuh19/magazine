@@ -117,9 +117,10 @@ const Posts = () => {
         for(let i=1; i<postNewContent.length; i++){
             if(postNewContent[i].type === 5){
                 /*promises.push({
+                    raw: postNewContent[i].raw, 
                     id_post: id_post, 
-                    type: postNewContent[i].type, 
                     content: postNewContent[i].content, 
+                    type: postNewContent[i].type,
                     id: postNewContent[i].id
                 });*/
                 promises.push(insertPostTypesWithImage(postNewContent[i].raw, id_post, postNewContent[i].type, postNewContent[i].content, postNewContent[i].id));
@@ -141,6 +142,7 @@ const Posts = () => {
                     console.log(results);
                 }).finally(() => setLoading(false));
                 setLoading(true);
+                //console.log(insertPostsTypesWithImage(x[0].id_post));
                 Promise.all(insertPostsTypesWithImage(x[0].id_post)).then(function (resultss) {
                     console.log(resultss);
                 }).finally(() => setLoading(false));
@@ -338,7 +340,7 @@ const Posts = () => {
 
                                                                         const handleEditorChange = (content:string) => {
                                                                             x.content = content;
-                                                                            console.log(x);
+                                                                            //console.log(x);
                                                                         }
 
                                                                         const handleChangeImage = (e:any) => {
@@ -347,6 +349,7 @@ const Posts = () => {
                                                                                 x.raw = e.target.files[0];
                                                                                 x.valid = true;
                                                                             }
+                                                                            console.log(this);
                                                                         };
                                                                         return (
                                                                             <div key={index}>
@@ -356,7 +359,7 @@ const Posts = () => {
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
                                                                                     <div className="col-sm-12 mt-2 justify-content-center" >
-                                                                                        <ImagePost onChange={handleChangeImage}></ImagePost>
+                                                                                        <ImagePost onChange={handleChangeImage} order={index}></ImagePost>
                                                                                         <Form.Group controlId="formBasicEmail">
                                                                                             <Form.Label>Pie de foto</Form.Label>
                                                                                             <Form.Control type="text" placeholder="" onChange={(e) => handleEditorChange(e.target.value)} />

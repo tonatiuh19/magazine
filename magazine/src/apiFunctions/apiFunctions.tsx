@@ -89,27 +89,26 @@ export const insertPostTypes = async (idPost:number, type:number, content:string
 };
 
 export const insertPostTypesWithImage = async (imageRaw:any, idPost:number, type:number, content:string, order:number) =>{
+    //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
+
     const formData = new FormData();
     formData.append("avatar", imageRaw);
     formData.append("id_post", String(idPost));
     formData.append("id_post_attachment_type", String(type));
     formData.append("content", content);
     formData.append("order_post", String(order));
-    try {
-        axios.post( 'https://tienditacafe.com/dashboard/user/uploadImage.php',
-            formData,
-            {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-            }
-        ).then(function(res){
-            return res.data;
-          })
-        .catch(function(){
-            return console.log('FAILURE!!');
-        });
-    } catch (e) {
-        return `😱 Request failed: ${e}`;
+    axios.post( 'http://localhost:8015/insertPostTypesWithimage.php',
+    formData,
+    {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
     }
+    ).then(function(res){
+        //console.log('SUCCESS!!', res);
+        return 1;
+    })
+    .catch(function(){
+        console.log('FAILURE!!');
+    });
 };

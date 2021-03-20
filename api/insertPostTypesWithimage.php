@@ -18,7 +18,9 @@ if($_FILES['avatar'])
     $sql = "INSERT INTO posts_attachment (id_post_attachment_type, content, id_post, order_post, date, active) VALUES ('$type', '$content', '$idPost', '$order_post', '$todayVisit', '1')";
 
     if ($conn->query($sql) === TRUE) {
-        $sql2 = "SELECT id_post_attachment FROM posts_attachment WHERE id_post=".$idPost." AND content=".$category." AND order_post=".$order_post." AND date='".$todayVisit."'";
+        $last_id = $conn->insert_id;
+        //echo "New record created successfully. Last inserted ID is: " . $last_id;
+        $sql2 = "SELECT id_post_attachment FROM posts_attachment WHERE id_post_attachment=".$last_id."";
         $result2 = $conn->query($sql2);
 
         if ($result2->num_rows > 0) {
@@ -27,7 +29,7 @@ if($_FILES['avatar'])
                 $idAttachment = $row2["id_post_attachment"];
             }
 
-            $folder_path = "../storage/images/".$idAttachment."/";
+            $folder_path = "storage/images/".$idAttachment."/";
             if (!file_exists($folder_path)) {
                 mkdir($folder_path, 0777, true);
             }else{

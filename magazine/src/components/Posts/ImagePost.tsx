@@ -6,12 +6,14 @@ const ImagePost = (props:any) => {
     const [errorImage, setErrorImage] = useState(true);
     const [errorImageText, setErrorImageText] = useState('Necesitas incluir una imagen');
     const [valid, setValid] = useState(true);
+    const [url, setURL] = useState('');
 
     const handleChangeImage = (e:any) => {
         if(validateImage(e.target.files[0])){
             if (e.target.files.length) {
+                setURL(URL.createObjectURL(e.target.files[0].name));
                 setImage({
-                  preview: URL.createObjectURL(e.target.files[0]),
+                  preview: url,
                   raw: e.target.files[0]
                 });
                 setErrorImage(false);
@@ -41,8 +43,11 @@ const ImagePost = (props:any) => {
     return (
         <div className="card text-center" style={{width: "28rem"}}>
             <label htmlFor="upload-button">
-                {image.preview ? (
-                    <img src={image.preview} width="300" height="300" />
+                {url ? (
+                    <>
+                    {/*<img src={url} width="300" height="300" />*/}
+                    <h3>{url}</h3>
+                    </>
                 ) : 
                 (
                     <>
