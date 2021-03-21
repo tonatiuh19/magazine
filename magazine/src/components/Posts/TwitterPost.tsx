@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Form} from 'react-bootstrap';
 
 const TwitterPost = (props:any) => {
@@ -20,12 +20,18 @@ const TwitterPost = (props:any) => {
         }
     }
 
+    useEffect(() => {
+        if(props.isEditing === 1){
+            setValid(false);
+        }
+    }, []);
+
     return (
         <div>
             <div className="col-sm-12 mt-2" >
                 <Form.Group controlId="formBasicEmail">
                 <Form.Label>Ingresa el link del post de Twitter</Form.Label>
-                    <Form.Control type="text" placeholder="" onChange={(e) => handleEditorChange(e.target.value)} />
+                    <Form.Control type="text" value={props.content} onChange={(e) => handleEditorChange(e.target.value)} />
                 </Form.Group>
             </div>
             {

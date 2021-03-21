@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
 import Science from './components/Science/Science';
 import {Navbar, Nav, Button, Form, FormControl} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,10 +19,10 @@ function App() {
           <Nav.Link href="#features">Features</Nav.Link>
           <Nav.Link href="#pricing">Pricing</Nav.Link>
         </Nav>
-        <Form inline>
+        {/* <Form inline>
           <FormControl type="text" placeholder="Buscar..." className="mr-sm-2" />
           <Button variant="outline-info">Buscar</Button>
-        </Form>
+        </Form> */}
         
       </Navbar>
       <div className="flex-shrink-0 main-container content">

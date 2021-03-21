@@ -1,11 +1,9 @@
 import React, {useState} from 'react'
-import {Modal, Button} from 'react-bootstrap'
+import {Modal,} from 'react-bootstrap'
 import Login from '../Login/Login';
-import {useHistory} from 'react-router-dom';
 
 const Footer = () => {
     const [showLogin, setShowLogin] = useState(false);
-    const history = useHistory();
 
     const handleCloseLogin = () =>{
         setShowLogin(false);

@@ -1,4 +1,6 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react';
+import {getImageAttachment} from '../../apiFunctions/apiFunctions'
+import Loading from '../../resources/Loading/Loading';
 
 const ImagePost = (props:any) => {
     const [image, setImage] = useState({ raw: "" });
@@ -7,6 +9,7 @@ const ImagePost = (props:any) => {
     const [errorImageText, setErrorImageText] = useState('Necesitas incluir una imagen');
     const [valid, setValid] = useState(true);
     const [url, setURL] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleChangeImage = (e:any) => {
         if(validateImage(e.target.files[0])){
@@ -40,32 +43,58 @@ const ImagePost = (props:any) => {
         return true;
     }
 
+    useEffect(()=>{
+        if(props.isEditing === 1){
+            setErrorImage(false);
+            setLoading(true);
+            getImageAttachment(props.idPostAttach).then((x) =>{
+                console.log(x);
+                setProductImage(x);
+                setURL(x);
+            }).finally(() => setLoading(false));
+        }
+    }, []);
+
     return (
         <div className="card text-center" style={{width: "28rem"}}>
-            <label htmlFor={props.order}>
-                {url ? (
-                    <>
-                    {<img src={url} width="300" />}
-                    {/*<h3>{url}</h3>*/}
-                    </>
-                ) : 
+            {loading ? (<div id="outer" className="container">
+                <div id="inner" className="row">
+                    <div className="col-12 text-center">
+                        <Loading></Loading>
+                    </div>   
+                </div>
+            </div>) 
+            : 
                 (
                     <>
-                        <img className="card-img-top" src={productImage} />
-                        <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
-                        <p>Solo se permiten archivos jpg & png.</p>
+                        <label htmlFor={props.order}>
+                            {url ? (
+                                <>
+                                {<img src={url} width="300" />}
+                                {/*<h3>{url}</h3>*/}
+                                </>
+                            ) : 
+                            (
+                                <>
+                                    <img className="card-img-top" src={productImage} />
+                                    <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
+                                    <p>Solo se permiten archivos jpg & png.</p>
+                                </>
+                            )}
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id={props.order}
+                            style={{ display: "none" }}
+                            onChange={handleChangeImage}
+                        />
+                        <br />
+                        {errorImage ? (<div className="alert alert-danger" role="alert">{errorImageText}</div>) : null}
                     </>
-                )}
-            </label>
-            <input
-                type="file"
-                accept="image/*"
-                id={props.order}
-                style={{ display: "none" }}
-                onChange={handleChangeImage}
-            />
-            <br />
-            {errorImage ? (<div className="alert alert-danger" role="alert">{errorImageText}</div>) : null}
+                )
+            }
+            
         </div>
     )
 }

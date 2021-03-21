@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import './styles/posts.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPowerOff, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { BsFillImageFill, BsTextIndentLeft, BsTrash, BsPencil } from 'react-icons/bs';
+import { BsFillImageFill, BsTextIndentLeft, BsTrash, BsPencil, BsFillEyeFill } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
 import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage, deActivatePost } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {Form, Modal, Button} from 'react-bootstrap';
-import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import Moment from 'moment';
 
 import ImagePost from './ImagePost';
 import EditorPost from './EditorPost';
@@ -16,7 +17,7 @@ import YoutubePost from './YoutubePost';
 import InstagramPost from './InstagramPost';
 import TwitterPost from './TwitterPost';
 import FacebookPost from './FacebookPost';
-import Profile from './Profile';
+import EditPost from './EditPost';
 
 const Posts = () => {
     const [loading, setLoading] = useState(true);
@@ -36,6 +37,10 @@ const Posts = () => {
 
     const [showDelete, setShowDelete] = useState(false);
     const [deletePostID, setDeletePost] = useState(0);
+
+    const [idPostEdit, setIdPostEdit] = useState(0);
+    const [titlePostEdit, setTitlePostEdit] = useState('');
+    const [typePostEdit, setTypePostEdit] = useState(0);
 
     const signOff = () =>{
         localStorage.clear();
@@ -166,7 +171,9 @@ const Posts = () => {
     const editPost = (id:number, title:string, type:number) =>{
         setNewPostStatus(true);
         setEditPostStatus(true);
-        console.log(id, title, type);
+        setIdPostEdit(id);
+        setTitlePostEdit(title);
+        setTypePostEdit(type);
     }
 
     const cancelEditPost = () =>{
@@ -260,14 +267,14 @@ const Posts = () => {
                                 (
                                     <div className="container">
                                         {editPostStatus ? (
-                                        <div className="row justify-content-center">
-                                            <div className="col-sm-12">
-                                                <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                            <div className="row justify-content-center">
+                                                <div className="col-sm-12">
+                                                    <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                </div>
+                                                <div className="col-sm-8">
+                                                    <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} postTypes={postsTypes}></EditPost>
+                                                </div>
                                             </div>
-                                            <div className="col-sm-8">
-                                                ss
-                                            </div>
-                                        </div>
                                         ) 
                                         : 
                                         (
@@ -319,7 +326,7 @@ const Posts = () => {
                                                                                         <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
-                                                                                    <EditorPost onChange={handleEditorChange}></EditorPost>
+                                                                                    <EditorPost onChange={handleEditorChange} isEditing={0}></EditorPost>
                                                                                 </div>
                                                                                 <hr></hr>
                                                                             </div>
@@ -338,7 +345,7 @@ const Posts = () => {
                                                                                         <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
-                                                                                    <YoutubePost onChange={handleEditorChange}></YoutubePost>
+                                                                                    <YoutubePost onChange={handleEditorChange} isEditing={0}></YoutubePost>
                                                                                 </div>
                                                                                 <hr></hr>
                                                                             </div>
@@ -357,7 +364,7 @@ const Posts = () => {
                                                                                         <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
-                                                                                    <InstagramPost onChange={handleEditorChange}></InstagramPost>
+                                                                                    <InstagramPost onChange={handleEditorChange} isEditing={0}></InstagramPost>
                                                                                 </div>
                                                                                 <hr></hr>
                                                                             </div>
@@ -377,7 +384,7 @@ const Posts = () => {
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
                                                                                     <div className="col-sm-12 mt-2" >
-                                                                                    <TwitterPost onChange={handleEditorChange}></TwitterPost>
+                                                                                    <TwitterPost onChange={handleEditorChange} isEditing={0}></TwitterPost>
                                                                                     </div>
                                                                                 </div>
                                                                                 <hr></hr>
@@ -399,7 +406,7 @@ const Posts = () => {
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
                                                                                     <div className="col-sm-12 mt-2" >
-                                                                                    <FacebookPost onChange={handleEditorChange}></FacebookPost>
+                                                                                    <FacebookPost onChange={handleEditorChange} isEditing={0}></FacebookPost>
                                                                                     </div>
                                                                                 </div>
                                                                                 <hr></hr>
@@ -430,7 +437,7 @@ const Posts = () => {
                                                                                         <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                     </div>
                                                                                     <div className="col-sm-12 mt-2 justify-content-center" >
-                                                                                        <ImagePost onChange={handleChangeImage} order={index}></ImagePost>
+                                                                                        <ImagePost onChange={handleChangeImage} order={index} isEditing={0}></ImagePost>
                                                                                         <Form.Group controlId="formBasicEmail">
                                                                                             <Form.Label>Pie de foto</Form.Label>
                                                                                             <Form.Control type="text" placeholder="" onChange={(e) => handleEditorChange(e.target.value)} />
@@ -484,6 +491,7 @@ const Posts = () => {
                                                                 <th scope="col">Titulo</th>
                                                                 <th scope="col">Tipo</th>
                                                                 <th scope="col">Fecha</th>
+                                                                <th scope="col"><BsFillEyeFill /></th>
                                                                 <th scope="col">Editar</th>
                                                                 <th scope="col">Eliminar</th>
                                                             </tr>
@@ -495,7 +503,8 @@ const Posts = () => {
                                                                         <th scope="row">{x.id_post}</th>
                                                                         <td>{x.titulo}</td>
                                                                         <td>{x.name}</td>
-                                                                        <td>{x.date_created}</td>
+                                                                        <td>{Moment(x.date_created).format('lll')}</td>
+                                                                        <td>{0}</td>
                                                                         <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>
                                                                         <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
                                                                       </tr>);

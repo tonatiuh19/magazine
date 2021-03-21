@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
 const EditorPost = (props:any) => {
     const [valid, setValid] = useState(true);
+    const [content, setContent] = useState('');
 
     const handleEditorChange = (content:any, editor:any) => {
         if(content.length !== 0){
@@ -20,12 +21,18 @@ const EditorPost = (props:any) => {
         }
     }
 
+    useEffect(() => {
+        if(props.isEditing === 1){
+            setValid(false);
+        }
+    }, []);
+
     return (
         <div>
             <div className="col-sm-12 mt-2" >
                 <Editor
                     apiKey="fsbuizdicw83hzcfi1qnge8cdxr039npsalv7ek1eh01hddx"
-                    initialValue=""
+                    initialValue={props.content}
                     init={{
                         height: 300,
                         menubar: false,
