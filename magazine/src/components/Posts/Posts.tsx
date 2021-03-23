@@ -18,6 +18,7 @@ import InstagramPost from './InstagramPost';
 import TwitterPost from './TwitterPost';
 import FacebookPost from './FacebookPost';
 import EditPost from './EditPost';
+import GeneralError from '../../resources/Error/GeneralError';
 
 const Posts = () => {
     const [loading, setLoading] = useState(true);
@@ -27,12 +28,12 @@ const Posts = () => {
     const [postNewContent, setPostNewContent] = useState<any>([{}]);
     const [newPostStatus, setNewPostStatus] = useState(false);
     const [editPostStatus, setEditPostStatus] = useState(false);
-    const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [title, setTitle] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [category, setCategory] = useState(0);
     const [categoryError, setCategoryError] = useState(false);
+    const [error, setError] = useState(false);
     const history = useHistory();
 
     const [showDelete, setShowDelete] = useState(false);
@@ -207,6 +208,10 @@ const Posts = () => {
 
     useEffect(() => {
         getPostsbyUser(getUser()).then((x) =>{
+            if(!Array.isArray(x)){
+                setError(true);
+                signOff();
+            }
             getPostsTypes().then((y) => {
                 setPostsTypes(y);
             });
@@ -220,314 +225,317 @@ const Posts = () => {
 
     return (
         <div >
-            <Modal
-                show={showDelete}
-                onHide={handleCloseDelete}
-                backdrop="static"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>¿Estas seguro?</Modal.Title>
-                </Modal.Header>
-                
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {handleCloseDelete(); setDeletePost(0);}}>
-                        Cancelar
-                    </Button>
-                    <Button variant="danger" onClick={()=> deletePost()}>Eliminar</Button>
-                </Modal.Footer>
-            </Modal>
-            <div className="d-flex" id="wrapper">
-
-                <div className="bg-light border-right " id="sidebar-wrapper">
-                    <div className="sidebar-heading"><h3>Publicaciones</h3></div>
-                    <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> @alias</div>
-                    <div className="list-group list-group-flush">
-                        
-                        <Link to="/creatives/" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</Link>
-                        <Link to="/profile/" className="list-group-item list-group-item-action bg-light">Mi Perfil</Link>
-                        
-                    </div>
-                </div>
-
-                <div id="page-content-wrapper">
-
-                <div className="container-fluid">
-                    {loading ? (
-                        <div id="outer" className="container">
-                            <div id="inner" className="row">
-                                <div className="col-12 text-center">
-                                    <Loading></Loading>
-                                </div>   
-                            </div>
+            {error ? (<GeneralError></GeneralError>)
+            :
+                (<><Modal
+                    show={showDelete}
+                    onHide={handleCloseDelete}
+                    backdrop="static"
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>¿Estas seguro?</Modal.Title>
+                    </Modal.Header>
+                    
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => {handleCloseDelete(); setDeletePost(0);}}>
+                            Cancelar
+                        </Button>
+                        <Button variant="danger" onClick={()=> deletePost()}>Eliminar</Button>
+                    </Modal.Footer>
+                </Modal>
+                <div className="d-flex" id="wrapper">
+    
+                    <div className="bg-light border-right " id="sidebar-wrapper">
+                        <div className="sidebar-heading"><h3>Publicaciones</h3></div>
+                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> @alias</div>
+                        <div className="list-group list-group-flush">
+                            
+                            <Link to="/creatives/" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</Link>
+                            <Link to="/profile/" className="list-group-item list-group-item-action bg-light">Mi Perfil</Link>
+                            
                         </div>
-                    ) : 
-                        (<>
-                            {newPostStatus ? 
-                                (
-                                    <div className="container">
-                                        {editPostStatus ? (
+                    </div>
+    
+                    <div id="page-content-wrapper">
+    
+                    <div className="container-fluid">
+                        {loading ? (
+                            <div id="outer" className="container">
+                                <div id="inner" className="row">
+                                    <div className="col-12 text-center">
+                                        <Loading></Loading>
+                                    </div>   
+                                </div>
+                            </div>
+                        ) : 
+                            (<>
+                                {newPostStatus ? 
+                                    (
+                                        <div className="container">
+                                            {editPostStatus ? (
+                                                <div className="row justify-content-center">
+                                                    <div className="col-sm-12">
+                                                        <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                    </div>
+                                                    <div className="col-sm-8">
+                                                        <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} postTypes={postsTypes}></EditPost>
+                                                    </div>
+                                                </div>
+                                            ) 
+                                            : 
+                                            (
                                             <div className="row justify-content-center">
                                                 <div className="col-sm-12">
-                                                    <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                    <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                                 </div>
                                                 <div className="col-sm-8">
-                                                    <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} postTypes={postsTypes}></EditPost>
-                                                </div>
-                                            </div>
-                                        ) 
-                                        : 
-                                        (
-                                        <div className="row justify-content-center">
-                                            <div className="col-sm-12">
-                                                <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <Form>
-                                                    <Form.Group controlId="formBasicEmail">
-                                                        <Form.Label>Titulo del Articulo/Post/Noticia/Nota</Form.Label>
-                                                        <Form.Control 
-                                                            type="text" 
-                                                            maxLength={115}
-                                                            onChange={e => {setTitle(e.target.value)}}
-                                                            placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
-                                                        <Form.Text className="text-muted">
-                                                        Debe ser menor a 115 caracteres.
-                                                        </Form.Text>
-                                                        {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
-                                                    </Form.Group>
-
-                                                    <Form.Group controlId="exampleForm.SelectCustom">
-                                                        <Form.Label>¿Que categoría?</Form.Label>
-                                                        <Form.Control as="select" custom onChange={(e:any) => {setCategory(e.target.value)}}>
-                                                            <option value={category}>...</option>
-                                                            {postsTypes.map((x:any, index) => {
-                                                                return (<option key={x.id_post_type} value={x.id_post_type}>{x.name}</option>);
-                                                            })}
-                                                        </Form.Control>
-                                                        {categoryError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
-                                                    </Form.Group>
-                                                    <label>¿Que quisieras añadir?</label>
-                                                    <div className="col-sm-12">
-                                                        {renderAdd()}
-                                                        <hr></hr>
-                                                        <div className="container">
-                                                                {postNewContent.map((x:any, index:number) =>{
-                                                                    if(x.type === 6){
-                                                                        x.id = index;
-                                                                        const handleEditorChange = (content:any) => {
-                                                                            x.content = content.content;
-                                                                            x.valid = content.valid
-                                                                        }
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <EditorPost onChange={handleEditorChange} isEditing={0}></EditorPost>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-                                                                        
-                                                                    }else if(x.type === 1){
-                                                                        x.id = index;
-                                                                        const handleEditorChange = (content:any) => {
-                                                                            x.content = content.content;
-                                                                            x.valid = content.valid
-                                                                        }
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <YoutubePost onChange={handleEditorChange} isEditing={0}></YoutubePost>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-
-                                                                    }else if(x.type === 2){
-                                                                        x.id = index;
-                                                                        const handleEditorChange = (content:any) => {
-                                                                            x.content = content.content;
-                                                                            x.valid = content.valid
-                                                                        }
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <InstagramPost onChange={handleEditorChange} isEditing={0}></InstagramPost>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-
-                                                                    }else if(x.type === 3){
-                                                                        x.id = index;
-                                                                        const handleEditorChange = (content:any) => {
-                                                                            x.content = content.content;
-                                                                            x.valid = content.valid
-                                                                        }
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <div className="col-sm-12 mt-2" >
-                                                                                    <TwitterPost onChange={handleEditorChange} isEditing={0}></TwitterPost>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-
-                                                                    }else if(x.type === 4){
-                                                                        x.id = index;
-                                                                        const handleEditorChange = (content:any) => {
-                                                                            x.content = content.content;
-                                                                            x.valid = content.valid
-                                                                            
-                                                                        }
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <div className="col-sm-12 mt-2" >
-                                                                                    <FacebookPost onChange={handleEditorChange} isEditing={0}></FacebookPost>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-
-                                                                    }else if(x.type === 5){
-                                                                        x.id = index;
-
-                                                                        const handleEditorChange = (content:string) => {
-                                                                            x.content = content;
-                                                                            //console.log(x);
-                                                                        }
-
-                                                                        const handleChangeImage = (e:any) => {
-                                                                            if (e.target.files.length) {
-                                                                                x.preview = URL.createObjectURL(e.target.files[0]);
-                                                                                x.raw = e.target.files[0];
-                                                                                x.valid = true;
-                                                                            }
-                                                                            console.log(this);
-                                                                        };
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div className="row">
-                                                                                    <div className="col-sm-12">
-                                                                                        <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                        <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
-                                                                                    </div>
-                                                                                    <div className="col-sm-12 mt-2 justify-content-center" >
-                                                                                        <ImagePost onChange={handleChangeImage} order={index} isEditing={0}></ImagePost>
-                                                                                        <Form.Group controlId="formBasicEmail">
-                                                                                            <Form.Label>Pie de foto</Form.Label>
-                                                                                            <Form.Control type="text" placeholder="" onChange={(e) => handleEditorChange(e.target.value)} />
-                                                                                        </Form.Group>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <hr></hr>
-                                                                            </div>
-                                                                        );
-                                                                    }
+                                                    <Form>
+                                                        <Form.Group controlId="formBasicEmail">
+                                                            <Form.Label>Titulo del Articulo/Post/Noticia/Nota</Form.Label>
+                                                            <Form.Control 
+                                                                type="text" 
+                                                                maxLength={115}
+                                                                onChange={e => {setTitle(e.target.value)}}
+                                                                placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
+                                                            <Form.Text className="text-muted">
+                                                            Debe ser menor a 115 caracteres.
+                                                            </Form.Text>
+                                                            {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                                                        </Form.Group>
+    
+                                                        <Form.Group controlId="exampleForm.SelectCustom">
+                                                            <Form.Label>¿Que categoría?</Form.Label>
+                                                            <Form.Control as="select" custom onChange={(e:any) => {setCategory(e.target.value)}}>
+                                                                <option value={category}>...</option>
+                                                                {postsTypes.map((x:any, index) => {
+                                                                    return (<option key={x.id_post_type} value={x.id_post_type}>{x.name}</option>);
                                                                 })}
-                                                        
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
+                                                            </Form.Control>
+                                                            {categoryError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                                                        </Form.Group>
+                                                        <label>¿Que quisieras añadir?</label>
                                                         <div className="col-sm-12">
-                                                            {error ? (<div className="alert alert-danger" role="alert">{errorText}</div>) : null}
+                                                            {renderAdd()}
+                                                            <hr></hr>
+                                                            <div className="container">
+                                                                    {postNewContent.map((x:any, index:number) =>{
+                                                                        if(x.type === 6){
+                                                                            x.id = index;
+                                                                            const handleEditorChange = (content:any) => {
+                                                                                x.content = content.content;
+                                                                                x.valid = content.valid
+                                                                            }
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <EditorPost onChange={handleEditorChange} isEditing={0}></EditorPost>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+                                                                            
+                                                                        }else if(x.type === 1){
+                                                                            x.id = index;
+                                                                            const handleEditorChange = (content:any) => {
+                                                                                x.content = content.content;
+                                                                                x.valid = content.valid
+                                                                            }
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <YoutubePost onChange={handleEditorChange} isEditing={0}></YoutubePost>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+    
+                                                                        }else if(x.type === 2){
+                                                                            x.id = index;
+                                                                            const handleEditorChange = (content:any) => {
+                                                                                x.content = content.content;
+                                                                                x.valid = content.valid
+                                                                            }
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <InstagramPost onChange={handleEditorChange} isEditing={0}></InstagramPost>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+    
+                                                                        }else if(x.type === 3){
+                                                                            x.id = index;
+                                                                            const handleEditorChange = (content:any) => {
+                                                                                x.content = content.content;
+                                                                                x.valid = content.valid
+                                                                            }
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <div className="col-sm-12 mt-2" >
+                                                                                        <TwitterPost onChange={handleEditorChange} isEditing={0}></TwitterPost>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+    
+                                                                        }else if(x.type === 4){
+                                                                            x.id = index;
+                                                                            const handleEditorChange = (content:any) => {
+                                                                                x.content = content.content;
+                                                                                x.valid = content.valid
+                                                                                
+                                                                            }
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <div className="col-sm-12 mt-2" >
+                                                                                        <FacebookPost onChange={handleEditorChange} isEditing={0}></FacebookPost>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+    
+                                                                        }else if(x.type === 5){
+                                                                            x.id = index;
+    
+                                                                            const handleEditorChange = (content:string) => {
+                                                                                x.content = content;
+                                                                                //console.log(x);
+                                                                            }
+    
+                                                                            const handleChangeImage = (e:any) => {
+                                                                                if (e.target.files.length) {
+                                                                                    x.preview = URL.createObjectURL(e.target.files[0]);
+                                                                                    x.raw = e.target.files[0];
+                                                                                    x.valid = true;
+                                                                                }
+                                                                            };
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <div className="row">
+                                                                                        <div className="col-sm-12">
+                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                        </div>
+                                                                                        <div className="col-sm-12 mt-2 justify-content-center" >
+                                                                                            <ImagePost onChange={handleChangeImage} order={index} isEditing={0}></ImagePost>
+                                                                                            <Form.Group controlId="formBasicEmail">
+                                                                                                <Form.Label>Pie de foto</Form.Label>
+                                                                                                <Form.Control type="text" placeholder="" onChange={(e) => handleEditorChange(e.target.value)} />
+                                                                                            </Form.Group>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <hr></hr>
+                                                                                </div>
+                                                                            );
+                                                                        }
+                                                                    })}
                                                             
-                                                            {postNewContent.length >= 2 ? (<button className="btn btn-success float-right" onClick={(e) => publish(e)}>Publicar</button>) : null}
-                                                        </div>        
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-12">
+                                                                {error ? (<div className="alert alert-danger" role="alert">{errorText}</div>) : null}
+                                                                
+                                                                {postNewContent.length >= 2 ? (<button className="btn btn-success float-right" onClick={(e) => publish(e)}>Publicar</button>) : null}
+                                                            </div>        
+                                                        </div>
+                                                    </Form>
+                                                </div>
+                                            </div>
+                                            )}
+                                            
+                                        </div>
+                                    ) 
+                                    : (
+                                    <>
+                                        {noPosts ? (
+                                            <div id="outer" className="container">
+                                                <div id="inner" className="row">
+                                                    <div className="col-12 text-center">
+                                                        <h4>Aun no tienes posts</h4>
+                                                        <button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button>
+                                                    </div>   
+                                                </div>
+                                            </div>
+                                        ): (
+                                            <div className="container">
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+                                                        <div className="float-right"><button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button></div>
                                                     </div>
-                                                </Form>
+                                                    <div className="col-sm-12">
+                                                        <table className="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">Titulo</th>
+                                                                    <th scope="col">Tipo</th>
+                                                                    <th scope="col">Fecha</th>
+                                                                    <th scope="col"><BsFillEyeFill /></th>
+                                                                    <th scope="col">Editar</th>
+                                                                    <th scope="col">Eliminar</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {
+                                                                    posts.map((x:any, index) =>{
+                                                                        return (<tr key={index}>
+                                                                            <th scope="row">{x.id_post}</th>
+                                                                            <td>{x.titulo}</td>
+                                                                            <td>{x.name}</td>
+                                                                            <td>{Moment(x.date_created).format('lll')}</td>
+                                                                            <td>{0}</td>
+                                                                            <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>
+                                                                            <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
+                                                                          </tr>);
+                                                                    })
+                                                                }
+                                                            </tbody>
+                                                        </table>
+    
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
                                         )}
-                                        
-                                    </div>
-                                ) 
-                                : (
-                                <>
-                                    {noPosts ? (
-                                        <div id="outer" className="container">
-                                            <div id="inner" className="row">
-                                                <div className="col-12 text-center">
-                                                    <h4>Aun no tienes posts</h4>
-                                                    <button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button>
-                                                </div>   
-                                            </div>
-                                        </div>
-                                    ): (
-                                        <div className="container">
-                                            <div className="row">
-                                                <div className="col-sm-12">
-                                                    <div className="float-right"><button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button></div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                    <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Titulo</th>
-                                                                <th scope="col">Tipo</th>
-                                                                <th scope="col">Fecha</th>
-                                                                <th scope="col"><BsFillEyeFill /></th>
-                                                                <th scope="col">Editar</th>
-                                                                <th scope="col">Eliminar</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {
-                                                                posts.map((x:any, index) =>{
-                                                                    return (<tr key={index}>
-                                                                        <th scope="row">{x.id_post}</th>
-                                                                        <td>{x.titulo}</td>
-                                                                        <td>{x.name}</td>
-                                                                        <td>{Moment(x.date_created).format('lll')}</td>
-                                                                        <td>{0}</td>
-                                                                        <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>
-                                                                        <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
-                                                                      </tr>);
-                                                                })
-                                                            }
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                            
-                        </>)
-                    }
-                    
-                    
-                </div>
-                </div>
-
-            </div>
+                                    </>
+                                )}
+                                
+                            </>)
+                        }
+                        
+                        
+                    </div>
+                    </div>
+    
+                </div></>)
+            }
+            
         </div>
     )
 }

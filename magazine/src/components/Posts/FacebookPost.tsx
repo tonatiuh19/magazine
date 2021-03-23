@@ -31,7 +31,7 @@ const FacebookPost = (props:any) => {
             <div className="col-sm-12 mt-2" >
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Ingresa el link del post de Facebook</Form.Label>
-                    <Form.Control type="text" value={props.content} onChange={(e) => handleEditorChange(e.target.value)} />
+                    <Form.Control type="text" defaultValue={props.content} onChange={(e) => handleEditorChange(e.target.value)} />
                 </Form.Group>
             </div>
             {

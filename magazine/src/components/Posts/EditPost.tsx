@@ -18,7 +18,7 @@ const EditPost = (props:any) => {
     const [editContent, setEditContent] = useState<any>([{}]);
 
     useEffect(() => {
-        console.log(editContent);
+        
         getPostAttachmentsByPost(props.idPost).then((x) =>{
             setPostsAttachments(x);
         }).finally(() => setLoading(false));
@@ -26,6 +26,7 @@ const EditPost = (props:any) => {
 
     const update = (e:any) =>{
         e.preventDefault();
+        console.log(postsAttachments);
     }
 
     return (
@@ -64,9 +65,10 @@ const EditPost = (props:any) => {
                 {postsAttachments.sort((a:any, b:any) => a.order_post - b.order_post).map((x:any, index:any) =>{
                     
                     if(x.id_post_attachment_type === 6){
-
+                        x.id = index;
                         const handleEditorChange = (content:any) => {
-                            
+                            x.content = content.content;
+                            x.valid = content.valid
                         }
                         return (
                             <div key={index}>
@@ -81,9 +83,10 @@ const EditPost = (props:any) => {
                         );
                         
                     }else if(x.id_post_attachment_type === 1){
-                       
+                        x.id = index;
                         const handleEditorChange = (content:any) => {
-                            
+                            x.content = content.content;
+                            x.valid = content.valid
                         }
                         return (
                             <div key={index}>
@@ -98,9 +101,10 @@ const EditPost = (props:any) => {
                         );
 
                     }else if(x.id_post_attachment_type === 2){
-                        
+                        x.id = index;
                         const handleEditorChange = (content:any) => {
-                        
+                            x.content = content.content;
+                            x.valid = content.valid
                         }
                         return (
                             <div key={index}>
@@ -116,9 +120,10 @@ const EditPost = (props:any) => {
                         );
 
                     }else if(x.id_post_attachment_type === 3){
-                        
+                        x.id = index;
                         const handleEditorChange = (content:any) => {
-                            
+                            x.content = content.content;
+                            x.valid = content.valid
                         }
                         return (
                             <div key={index}>
@@ -136,9 +141,10 @@ const EditPost = (props:any) => {
                         );
 
                     }else if(x.id_post_attachment_type === 4){
-                        
+                        x.id = index;
                         const handleEditorChange = (content:any) => {
-                            
+                            x.content = content.content;
+                            x.valid = content.valid
                             
                         }
                         return (
@@ -157,13 +163,17 @@ const EditPost = (props:any) => {
                         );
 
                     }else if(x.id_post_attachment_type === 5){
-
+                        x.id = index;
                         const handleEditorChange = (content:string) => {
-                            
+                            x.content = content;
                         }
 
                         const handleChangeImage = (e:any) => {
-                            
+                            if (e.target.files.length) {
+                                x.preview = URL.createObjectURL(e.target.files[0]);
+                                x.raw = e.target.files[0];
+                                x.valid = true;
+                            }
                         };
                         return (
                             <div key={index}>
@@ -176,7 +186,7 @@ const EditPost = (props:any) => {
                                         <ImagePost onChange={handleChangeImage} idPostAttach={x.id_post_attachment} order={index} isEditing={1}></ImagePost>
                                         <Form.Group controlId="formBasicEmail">
                                             <Form.Label>Pie de foto</Form.Label>
-                                            <Form.Control type="text" value={x.content} onChange={(e) => handleEditorChange(e.target.value)} />
+                                            <Form.Control type="text" defaultValue={x.content} onChange={(e) => handleEditorChange(e.target.value)} />
                                         </Form.Group>
                                     </div>
                                 </div>
@@ -185,7 +195,7 @@ const EditPost = (props:any) => {
                         );
                     }
                 })}
-                {editContent.length >= 2 ? (<button className="btn btn-primary float-right" onClick={(e) => update(e)}>Actualizar</button>) : null}
+                {true ? (<button className="btn btn-primary float-right" onClick={(e) => update(e)}>Actualizar</button>) : null}
             </Form>)}
             
             
