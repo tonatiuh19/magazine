@@ -1,25 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import { useHistory, Link } from "react-router-dom";
 import Loading from '../../resources/Loading/Loading';
-import {Form, Row, Col} from 'react-bootstrap';
-import {getSocialNetworks} from '../../apiFunctions/apiFunctions';
+import {Form, Row, Col, Modal, Button} from 'react-bootstrap';
+import {getSocialNetworks, insertCreactive, insertCreactiveSocials } from '../../apiFunctions/apiFunctions';
 import SocialNetworks from './SocialNetworks';
-import { FaExclamationCircle } from 'react-icons/fa';
+import { FaArrowCircleUp, FaMagic } from 'react-icons/fa';
 
 const NewProfile = () => {
 
     const [loading, setLoading] = useState(true);
-    const [socials, setSocials] = useState([]);
-    const [socialsSelected, setSocialsSelected] = useState<any>([]);
+    const [socials, setSocials] = useState<any>([]);
+    const [validation, setValidation] = useState({
+        mail: false,
+        pwd: false,
+        firstName: false,
+        lastName: false,
+        socials: false,
+        justification: false
+    });
+    const [generalValidation, setGeneralValidation] = useState(false);
+    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [justification, setJustification] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+
     const history = useHistory();
 
     const signOff = () =>{
         localStorage.clear();
         history.push("/");
-    }
-
-    const getUser = () =>{
-        return Number(localStorage.getItem("08191993"));
     }
 
     const userLoggedIn = () =>{
@@ -30,6 +41,72 @@ const NewProfile = () => {
         }
     }
 
+    const validationForm = () => {
+        if(!(validateEmail(email))){
+            validation.mail = true;
+            setValidation({...validation});
+            return false;
+        }else{
+            validation.mail = false;
+            setValidation({...validation});
+        }
+
+        if(pwd === ''){
+            validation.pwd = true;
+            setValidation({...validation});
+            return false;
+        }else{
+            validation.pwd = false;
+            setValidation({...validation});
+        }
+
+        if(firstName === ''){
+            validation.firstName = true;
+            setValidation({...validation});
+            return false;
+        }else{
+            validation.firstName = false;
+            setValidation({...validation});
+        }
+
+        if(lastName === ''){
+            validation.lastName = true;
+            setValidation({...validation});
+            return false;
+        }else{
+            validation.lastName = false;
+            setValidation({...validation});
+        }
+
+        if(socials.length >= 1){
+            for(let key in socials){
+                if(socials[key].value === ''){
+                    validation.socials = true;
+                    setValidation({...validation});
+                    return false;
+                }else{
+                    validation.socials = false;
+                    setValidation({...validation});
+                }
+            }
+        }
+
+        if(justification === ''){
+            validation.justification = true;
+            setValidation({...validation});
+            return false;
+        }else{
+            validation.justification = false;
+            setValidation({...validation});
+        }
+
+        return true;
+    }
+
+    function validateEmail(email: String) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
 
 
     useEffect(() => {
@@ -42,13 +119,41 @@ const NewProfile = () => {
         }
     }, []);
 
+    const insertCreativeSocials = (id_user:number) =>{
+        let promises = [];       
+        for(let i=0; i<socials.length; i++){
+            if("value" in socials[i]){
+                promises.push(insertCreactiveSocials(id_user, socials[i].id_creatives_social_networks_types, socials[i].value));
+            }
+        }
+        return promises;
+    };
+
     const sendForm = (e:any) =>{
         e.preventDefault();
-        console.log(socials);
+        if(validationForm()){
+            setGeneralValidation(false);
+            setLoading(true);
+            insertCreactive(email, pwd, firstName, lastName, justification).then((x) => {
+                Promise.all(insertCreativeSocials(x[0].id_user)).then(function (results) {
+                    //console.log(results);
+                }).finally(() => {
+                    setLoading(false);
+                    setShowSuccess(true);
+                });
+            });
+        }else{
+            setGeneralValidation(true);
+        }
+    }
+
+    const handleCloseSuccess = () =>{
+        setShowSuccess(false);
+        history.push("/");
     }
 
     return (
-        <div className="container">
+        <div className="container mb-5">
             {loading ? (<div id="outer" className="container">
                 <div id="inner" className="row">
                     <div className="col-sm-12 text-center">
@@ -56,7 +161,26 @@ const NewProfile = () => {
                     </div>   
                 </div>
             </div>) :
-            (<div className="container mt-5">
+            (<>
+            <Modal
+                show={showSuccess}
+                onHide={handleCloseSuccess}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Te haz registrado con exito  <FaMagic /></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Enseguida nos pondremos en contacto contigo con instrucciones cuando tu cuenta se encuentre activa.
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="success" onClick={handleCloseSuccess}>
+                    Entendido
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            <div className="container mt-5">
                 <div className="row text-center">
                     <div className="col-sm-12">
                         <h1>Bienvenido</h1>
@@ -66,28 +190,32 @@ const NewProfile = () => {
                     <div className="col-sm-8">
                         
                         <Form>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Control type="email" className="border border-danger" placeholder="Escribe tu correo electronico" />
+                            <Form.Group>
+                                {validation.mail ? (<Form.Control type="email" className="border border-danger" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />) 
+                                : (<Form.Control type="email" className="border border-secondary" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />)}
                             </Form.Group>
-                            <Form.Group controlId="formBasicPassword">
-                                <Form.Control type="password" className="border border-secondary" placeholder="Escribe una contraseña" />
+                            <Form.Group>
+                                {validation.pwd ? (<Form.Control type="password" className="border border-danger" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />) 
+                                : (<Form.Control type="password" className="border border-secondary" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />)}
                             </Form.Group>
-                            <Form.Group controlId="formBasicPassword">
+                            <Form.Group>
                                 <Row>
                                     <Col>
-                                        <Form.Control className="border border-secondary" placeholder="Primer Nombre" />
+                                        {validation.firstName ? (<Form.Control className="border border-danger" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />) 
+                                        : (<Form.Control className="border border-secondary" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />)}
                                     </Col>
                                     <Col>
-                                        <Form.Control className="border border-secondary" placeholder="Apellido" />
+                                        {validation.lastName ? (<Form.Control className="border border-danger" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />) 
+                                        : (<Form.Control className="border border-secondary" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />)}
                                     </Col>
                                 </Row>
                             </Form.Group>
-                            
-                            <div className="container border border-secondary rounded mb-2">
+
+                            <div className={validation.socials ? "container border border-danger rounded mb-2" : "container border border-secondary rounded mb-2"}>
                                 <div className="row text-left">
                                     <div className="col-sm-12">
                                         <p>
-                                            <label className="mt-1 text-muted">Selecciona e indica cuales son tus perfiles sociales:</label>
+                                            <label className="mt-1 text-muted">Selecciona e indica cual(es) es(son) tu(s) perfil(es) social(es):</label>
                                         </p>
                                     </div>
                                 </div>
@@ -97,28 +225,36 @@ const NewProfile = () => {
                                     const handleSocialContent = (val:any) =>{
                                         x.value = val.value;
                                     }
-                                    return (<SocialNetworks key={index} type={x.id_creatives_social_networks_types} value={x.title} onChange={handleSocialContent}></SocialNetworks>);
-                                })}
-                                
+                                    return (<SocialNetworks key={index} type={x.id_creatives_social_networks_types} edit={0} value={x.title} onChange={handleSocialContent}></SocialNetworks>);
+                                })}                            
                             </div>
-                            <Form.Group controlId="exampleForm.ControlTextarea1">
-                                <Form.Control className="border border-secondary" placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />
-                            </Form.Group>
                             
-                            <Form.Group controlId="formBasicPassword">
+                            <Form.Group>
+                                {validation.justification ? (<Form.Control className="border border-danger" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />) 
+                                : (<Form.Control className="border border-secondary" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />)}
+                            </Form.Group>
+                            {generalValidation ? (<div className="container">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="alert alert-danger p-1 show" role="alert">
+                                            Faltan campos por completar <a onClick={() => window.scroll(0,0)} className="text-danger"><FaArrowCircleUp /></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>) : null}
+                            <Form.Group>
                                 <button className="btn btn-outline-success col-sm-12" onClick={(e) =>sendForm(e)}>Enviar</button>
                             </Form.Group>
-                            <Form.Group controlId="formBasicCheckbox">
+                            <Form.Group>
                                 <div className="form-check">
                                     <label className="form-check-label text-muted" >Al enviar acepto <a href="">Terminos y condiciones</a> y <a href="">Politicas de privacidad.</a></label>
                                 </div>
                             </Form.Group>
                           
-                            
                         </Form>
                     </div>
                 </div>
-            </div>)}
+            </div></>)}
         </div>
     )
 }

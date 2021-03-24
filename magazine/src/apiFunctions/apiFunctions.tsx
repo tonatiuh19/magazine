@@ -308,3 +308,81 @@ export const insertPostImage = async (imageRaw:any, idPost:number) =>{
         console.log('FAILURE!!');
     });
 };
+
+export const insertCreactive = async (email:string, pwd:string, name:string, lastName:string, justification:string) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/insertCreative.php',
+            { 
+                email: email,
+                pwd: pwd,
+                name: name,
+                lastName: lastName,
+                justification: justification,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const insertCreactiveSocials = async (idUser:number, type:number, value:string) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/insertCreativeSocials.php',
+            { 
+                id_user: idUser,
+                type: type,
+                value: value,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getFullUserInfo = async (idUser:Number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getFullUserInfoByUser.php', 
+            { 
+                id_user: idUser,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const updateCreative = async (email:string, pwd:string, name:string, lastName:string, idUser:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/updateCreative.php',
+            { 
+                email: email,
+                pwd: pwd,
+                name: name,
+                lastName: lastName,
+                id_user: idUser,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};

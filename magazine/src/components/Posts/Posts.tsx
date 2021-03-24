@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './styles/posts.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPowerOff, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPowerOff, faPlusCircle, faTimesCircle, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { BsFillImageFill, BsTextIndentLeft, BsTrash, BsPencil, BsFillEyeFill } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
+import { FaUserAstronaut } from 'react-icons/fa';
 import { getUserInfo, getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage, deActivatePost, insertPostImage } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {Form, Modal, Button} from 'react-bootstrap';
@@ -49,6 +50,8 @@ const Posts = () => {
     const [idPostEdit, setIdPostEdit] = useState(0);
     const [titlePostEdit, setTitlePostEdit] = useState('');
     const [typePostEdit, setTypePostEdit] = useState(0);
+
+    const [showInactive, setShowInactive] = useState(false);
 
     const signOff = () =>{
         localStorage.clear();
@@ -308,7 +311,11 @@ const Posts = () => {
     useEffect(() => {
         if(userLoggedIn()){
             getUserInfo(getUser()).then((x) =>{
-                setFullName(x[0].nombre+' '+x[0].apellido);
+                if(x == 0){
+
+                }else{
+                    setFullName(x[0].nombre+' '+x[0].apellido);
+                }
             }).finally(() => setLoading(false));
             startInfo();
         }else{
@@ -316,11 +323,36 @@ const Posts = () => {
         }
     }, []);
 
+    const handleCloseInactive = () =>{
+        setShowInactive(false);
+        signOff();
+    }
+
+    const help = () =>{
+
+    }
+
     return (
         <div >
             {generalError ? (<GeneralError></GeneralError>)
             :
-                (<><Modal
+                (<>
+                <Modal
+                    show={showInactive}
+                    onHide={handleCloseInactive}
+                    backdrop="static"
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Tu cuenta aun no se encuentra activa</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseInactive}>
+                        Entendido
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal
                     show={showDelete}
                     onHide={handleCloseDelete}
                     backdrop="static"
@@ -341,9 +373,11 @@ const Posts = () => {
     
                     <div className="bg-light border-right " id="sidebar-wrapper">
                         <div className="sidebar-heading"><h3>Publicaciones</h3></div>
-                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> {fullName}</div>
+                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark mr-1" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button>
+                        <button className="btn btn-sm btn-outline-dark" onClick={() => help()}><FontAwesomeIcon icon={faQuestion} /></button>
+                        </div>
                         <div className="list-group list-group-flush">
-                            
+                            <Link to="/profile/" className="list-group-item list-group-item-action bg-light text-dark"><FaUserAstronaut /> {fullName}</Link>
                             <Link to="/creatives/" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</Link>
                             <Link to="/profile/" className="list-group-item list-group-item-action bg-light">Mi Perfil</Link>
                             
