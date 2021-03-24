@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import { useHistory, Link } from "react-router-dom";
 import Loading from '../../resources/Loading/Loading';
-import {Form} from 'react-bootstrap';
+import {Form, Row, Col} from 'react-bootstrap';
+import {getSocialNetworks} from '../../apiFunctions/apiFunctions';
+import SocialNetworks from './SocialNetworks';
+import { FaExclamationCircle } from 'react-icons/fa';
 
 const NewProfile = () => {
 
     const [loading, setLoading] = useState(true);
+    const [socials, setSocials] = useState([]);
+    const [socialsSelected, setSocialsSelected] = useState<any>([]);
     const history = useHistory();
 
     const signOff = () =>{
@@ -26,13 +31,21 @@ const NewProfile = () => {
     }
 
 
+
     useEffect(() => {
         if(userLoggedIn()){
             history.push("/creatives");
         }else{
-            setLoading(false);
+            getSocialNetworks().then((x) => {
+                setSocials(x);
+            }).finally(() => setLoading(false));
         }
     }, []);
+
+    const sendForm = (e:any) =>{
+        e.preventDefault();
+        console.log(socials);
+    }
 
     return (
         <div className="container">
@@ -43,41 +56,65 @@ const NewProfile = () => {
                     </div>   
                 </div>
             </div>) :
-            (<div className="container card mt-5">
+            (<div className="container mt-5">
                 <div className="row text-center">
                     <div className="col-sm-12">
                         <h1>Bienvenido</h1>
                     </div>
                 </div>
-                <div className="row card-body text-center justify-content-center">
+                <div className="row text-center justify-content-center">
                     <div className="col-sm-8">
                         
                         <Form>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Control type="email" placeholder="Escribe tu correo electronico" />
+                                <Form.Control type="email" className="border border-danger" placeholder="Escribe tu correo electronico" />
                             </Form.Group>
                             <Form.Group controlId="formBasicPassword">
-                                <Form.Control type="password" placeholder="Escribe una contraseña" />
+                                <Form.Control type="password" className="border border-secondary" placeholder="Escribe una contraseña" />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicPassword">
+                                <Row>
+                                    <Col>
+                                        <Form.Control className="border border-secondary" placeholder="Primer Nombre" />
+                                    </Col>
+                                    <Col>
+                                        <Form.Control className="border border-secondary" placeholder="Apellido" />
+                                    </Col>
+                                </Row>
                             </Form.Group>
                             
-                            <div className="container bg-light rounded">
+                            <div className="container border border-secondary rounded mb-2">
                                 <div className="row text-left">
                                     <div className="col-sm-12">
                                         <p>
-                                            <label className="">¿Cuales son tus redes sociales?</label>
+                                            <label className="mt-1 text-muted">Selecciona e indica cuales son tus perfiles sociales:</label>
                                         </p>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col-sm-4">
-                                        <div className="form-group form-check">
-                                            <input type="checkbox" className="form-check-input" id="exampleCheck1"></input>
-                                            <label className="form-check-label">Check me out</label>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-8"><input type="text" className="form-control" id="exampleCheck1"></input></div>
-                                </div>
+                                
+                                {socials.map((x:any, index:any) => {
+
+                                    const handleSocialContent = (val:any) =>{
+                                        x.value = val.value;
+                                    }
+                                    return (<SocialNetworks key={index} type={x.id_creatives_social_networks_types} value={x.title} onChange={handleSocialContent}></SocialNetworks>);
+                                })}
+                                
                             </div>
+                            <Form.Group controlId="exampleForm.ControlTextarea1">
+                                <Form.Control className="border border-secondary" placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />
+                            </Form.Group>
+                            
+                            <Form.Group controlId="formBasicPassword">
+                                <button className="btn btn-outline-success col-sm-12" onClick={(e) =>sendForm(e)}>Enviar</button>
+                            </Form.Group>
+                            <Form.Group controlId="formBasicCheckbox">
+                                <div className="form-check">
+                                    <label className="form-check-label text-muted" >Al enviar acepto <a href="">Terminos y condiciones</a> y <a href="">Politicas de privacidad.</a></label>
+                                </div>
+                            </Form.Group>
+                          
+                            
                         </Form>
                     </div>
                 </div>

@@ -66,6 +66,20 @@ export const getPostsTypes = async () =>{
     }
 };
 
+export const getSocialNetworks = async () =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getSocialNetworks.php',{}
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
 export const insertPost = async (idUser:number, title:string, category:number) =>{
     try {
         const response = await axios.post('http://localhost:8015/insertPost.php',
