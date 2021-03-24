@@ -27,7 +27,7 @@ const FacebookPost = (props:any) => {
     }, []);
 
     return (
-        <div>
+        <div >
             <div className="col-sm-12 mt-2" >
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Ingresa el link del post de Facebook</Form.Label>

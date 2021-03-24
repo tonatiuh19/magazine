@@ -68,7 +68,7 @@ const Login = (props:any) => {
     }, []);
 
     return (
-        <div className="App">
+        <div className="container">
             <div className="">
                 <div className="">
                     <div>

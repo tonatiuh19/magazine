@@ -10,6 +10,7 @@ import Main from './components/Main/Main';
 import Profile from './components/Posts/Profile';
 import {getPostsTypes} from './apiFunctions/apiFunctions';
 import Loading from './resources/Loading/Loading';
+import NewProfile from './components/Posts/NewProfile';
 function App() {
   document.title = 'Agustirri';
   const [loading, setLoading] = useState(true);
@@ -46,14 +47,17 @@ function App() {
           
         </Navbar>
         <div className="flex-shrink-0 main-container content">
-          <Router>
-            <Switch>
-              <Route exact path='/' component={Main} />
-              <Route path="/creatives" component={Posts} />
-              <Route path="/profile" component={Profile} />
-              <Route path="/ciencia" component={Science} />
-            </Switch>    
-          </Router>
+          <main>
+            <Router>
+              <Switch>
+                <Route exact path='/' component={Main} />
+                <Route path="/creatives" component={Posts} />
+                <Route path="/holaCreativo" component={NewProfile} />
+                <Route path="/profile" component={Profile} />
+                <Route path="/ciencia" component={Science} />
+              </Switch>    
+            </Router>
+          </main>
         </div>
         <Footer></Footer>
       </>

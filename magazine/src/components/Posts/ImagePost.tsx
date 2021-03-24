@@ -56,7 +56,7 @@ const ImagePost = (props:any) => {
     }, []);
 
     return (
-        <div className="card text-center" style={{width: "28rem"}}>
+        <div className="card text-center" style={{width: "100%"}}>
             {loading ? (<div id="outer" className="container">
                 <div id="inner" className="row">
                     <div className="col-12 text-center">
@@ -70,13 +70,14 @@ const ImagePost = (props:any) => {
                         <label htmlFor={props.order}>
                             {url ? (
                                 <>
-                                {<img src={url} width="300" />}
-                                {/*<h3>{url}</h3>*/}
+                                {<img className="card-img-top" src={url} width="300" />}
+                                {props.isEditing === 1 ? (<><h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
+                                    <p>Solo se permiten archivos jpg & png.</p></>) : null}
                                 </>
                             ) : 
                             (
                                 <>
-                                    <img className="card-img-top" src={productImage} />
+                                    <img className="card-img-top" src={productImage} width="300" />
                                     <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
                                     <p>Solo se permiten archivos jpg & png.</p>
                                 </>

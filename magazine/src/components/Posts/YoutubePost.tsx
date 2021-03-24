@@ -32,7 +32,7 @@ const YoutubePost = (props:any) => {
     return (
         <div>
             <div className="col-sm-12 mt-2" >
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="formBasicEmail" style={{width: '100%'}}>
                     <Form.Label>Ingresa el link del video</Form.Label>
                     <Form.Control type="text" defaultValue={props.content} onChange={(e) => handleEditorChange(e.target.value)} />
                 </Form.Group>

@@ -18,6 +18,23 @@ export const signIn = async (email: String, password: String) =>{
     }
 };
 
+export const getUserInfo = async (idUser:Number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getUserInfoByUser.php', 
+            { 
+                id_user: idUser,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
 export const getPostsbyUser = async (idUser:Number) =>{
     try {
         const response = await axios.post('http://localhost:8015/getPostsbyUser.php', 
@@ -139,6 +156,98 @@ export const getImageAttachment = async (idPostAttachment:number) =>{
     }
 };
 
+export const updatePost = async (idUser:number, title:string, category:number, idPost:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/updatePost.php',
+            { 
+                id_user: idUser,
+                id_post: idPost,
+                title: title,
+                category: category,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const updatePostTypes = async (idPost:number, type:number, content:string, order:number, idPostAttach:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/updatePostTypes.php',
+            {
+                id_post: idPost,
+                id_post_attachment_type: type,
+                content: content,
+                order_post: order,
+                id_post_attachment: idPostAttach,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const updatePostTypesWithImage = async (imageRaw:any, idPost:number, type:number, content:string, order:number, editing:number, oldIdPost:number) =>{
+    //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
+
+    const formData = new FormData();
+    formData.append("avatar", imageRaw);
+    formData.append("id_post", String(idPost));
+    formData.append("id_post_attachment_type", String(type));
+    formData.append("content", content);
+    formData.append("order_post", String(order));
+    formData.append("editing", String(editing));
+    formData.append("old_id_post", String(oldIdPost));
+    axios.post( 'http://localhost:8015/updatePostTypesWithimage.php',
+    formData,
+    {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
+    }
+    ).then(function(res){
+        console.log('SUCCESS!!', res);
+        return 1;
+    })
+    .catch(function(){
+        console.log('FAILURE!!');
+    });
+};
+
+export const updatePostImage = async (imageRaw:any, idPost:number, oldIdPost:number, isEditing:number) =>{
+    //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
+
+    const formData = new FormData();
+    formData.append("avatar", imageRaw);
+    formData.append("id_post", String(idPost));
+    formData.append("old_id_post", String(oldIdPost));
+    formData.append("editing", String(isEditing));
+    axios.post( 'http://localhost:8015/updatePostImage.php',
+    formData,
+    {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
+    }
+    ).then(function(res){
+        console.log('SUCCESS!!', res);
+        return 1;
+    })
+    .catch(function(){
+        console.log('FAILURE!!');
+    });
+};
+
 export const insertPostTypesWithImage = async (imageRaw:any, idPost:number, type:number, content:string, order:number) =>{
     //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
 
@@ -156,7 +265,29 @@ export const insertPostTypesWithImage = async (imageRaw:any, idPost:number, type
       }
     }
     ).then(function(res){
-        //console.log('SUCCESS!!', res);
+        console.log('SUCCESS!!', res);
+        return 1;
+    })
+    .catch(function(){
+        console.log('FAILURE!!');
+    });
+};
+
+export const insertPostImage = async (imageRaw:any, idPost:number) =>{
+    //console.log("Img", imageRaw, "Id_post", String(idPost), "id_post_attachment_type", String(type), "content", content, "order_post", String(order));
+
+    const formData = new FormData();
+    formData.append("avatar", imageRaw);
+    formData.append("id_post", String(idPost));
+    axios.post( 'http://localhost:8015/insertPostImage.php',
+    formData,
+    {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
+    }
+    ).then(function(res){
+        console.log('SUCCESS!!', res);
         return 1;
     })
     .catch(function(){

@@ -5,7 +5,7 @@ import { faPowerOff, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid
 import { BsFillImageFill, BsTextIndentLeft, BsTrash, BsPencil, BsFillEyeFill } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { GrYoutube, GrFacebook, GrInstagram, GrTwitter } from 'react-icons/gr';
-import { getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage, deActivatePost } from '../../apiFunctions/apiFunctions';
+import { getUserInfo, getPostsbyUser, getPostsTypes, insertPost, insertPostTypes, insertPostTypesWithImage, deActivatePost, insertPostImage } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {Form, Modal, Button} from 'react-bootstrap';
 import { useHistory, Link } from "react-router-dom";
@@ -34,6 +34,13 @@ const Posts = () => {
     const [category, setCategory] = useState(0);
     const [categoryError, setCategoryError] = useState(false);
     const [error, setError] = useState(false);
+    const [url, setURL] = useState('');
+    const [productImagePost, setProductImage] = useState('');
+    const [errorImagePost, setErrorImagePost] = useState(false);
+    const [errorImageTextPost, setErrorImageTextPost] = useState('Necesitas incluir una imagen');
+    const [image, setImagePost] = useState({ raw: "" });
+    const [generalError, setGeneralError] = useState(false);
+    const [fullName, setFullName] = useState("");
     const history = useHistory();
 
     const [showDelete, setShowDelete] = useState(false);
@@ -90,6 +97,13 @@ const Posts = () => {
             setTitleError(false);
         }
 
+        if(image.raw === ""){
+            setErrorImagePost(true);
+            return false;
+        }else{
+            setErrorImagePost(false);
+        }
+
         if(category === 0){
             setCategoryError(true);
             return false;
@@ -106,7 +120,6 @@ const Posts = () => {
     }
 
     const insertPostsTypes = (id_post:number) =>{
-        console.log("id",id_post);
         let promises = [];       
         for(let i=1; i<postNewContent.length; i++){
             if(postNewContent[i].type !== 5){
@@ -123,7 +136,6 @@ const Posts = () => {
     };
 
     const insertPostsTypesWithImage = (id_post:number) =>{
-        console.log("id",id_post);
         let promises = [];       
         for(let i=1; i<postNewContent.length; i++){
             if(postNewContent[i].type === 5){
@@ -142,6 +154,7 @@ const Posts = () => {
 
     const publish = (e:any) => {
         e.preventDefault();
+        console.log(validatePost());
         if(!validatePost()){
             setError(true);
             setErrorText('Necesitas completar todos los campos');
@@ -149,14 +162,24 @@ const Posts = () => {
             setError(false);
             setLoading(true);
             insertPost(getUser(), title, category).then((x) => {
+                insertPostImage(image.raw, x[0].id_post).finally(() => setLoading(false));
                 Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
                     console.log(results);
-                }).finally(() => setLoading(false));
-                setLoading(true);
+                });
                 //console.log(insertPostsTypesWithImage(x[0].id_post));
                 Promise.all(insertPostsTypesWithImage(x[0].id_post)).then(function (resultss) {
                     console.log(resultss);
-                }).finally(() => setLoading(false));
+                });
+            }).then(() =>{
+                setErrorText('');
+                setPostNewContent([{}]);
+                setError(false);
+                setNewPostStatus(false);
+                setImagePost({ raw: "" });
+                setURL('');
+                setProductImage('');
+            }).finally(() => {
+                startInfo();
             });
         }
         
@@ -167,6 +190,9 @@ const Posts = () => {
         setPostNewContent([{}]);
         setError(false);
         setNewPostStatus(false);
+        setImagePost({ raw: "" });
+        setURL('');
+        setProductImage('');
     }
 
     const editPost = (id:number, title:string, type:number) =>{
@@ -177,12 +203,22 @@ const Posts = () => {
         setTypePostEdit(type);
     }
 
-    const cancelEditPost = () =>{
-        setErrorText('');
-        setPostNewContent([{}]);
-        setError(false);
-        setNewPostStatus(false);
-        setEditPostStatus(false);
+    const cancelEditPost = (from:number) =>{
+        if(from === 1){
+            setErrorText('');
+            setPostNewContent([{}]);
+            setError(false);
+            setNewPostStatus(false);
+            setEditPostStatus(false);
+            startInfo();
+        }else{
+            setErrorText('');
+            setPostNewContent([{}]);
+            setError(false);
+            setNewPostStatus(false);
+            setEditPostStatus(false);
+        }
+        
     }
 
     const deletePost = () =>{
@@ -206,26 +242,83 @@ const Posts = () => {
         setShowDelete(false);
     }
 
-    useEffect(() => {
+    const handleChangeImagePost = (e:any) =>{
+        if(validateImagePost(e.target.files[0])){
+            if (e.target.files.length) {
+                setURL(URL.createObjectURL(e.target.files[0]));
+                setImagePost({
+                  
+                  raw: e.target.files[0]
+                });
+                setErrorImagePost(false);
+              }else{
+                setErrorImagePost(true);
+              }
+        }
+
+    }
+
+    const validateImagePost = (file:any) =>{
+        let fileNameArr =  file.name.split(".");
+        let filename = fileNameArr[fileNameArr.length-1];
+        if (!(filename === "png" || filename === "jpg" || filename === "JPG" || filename === "PNG")) {
+            setErrorImageTextPost("Solo se soportan archivos png o jpg");
+            return false;
+        }
+        if (file.size > 3195432) {
+           setErrorImageTextPost("Solo se soportan archivos menores a 3 MB");
+           return false;
+        }
+        setErrorImagePost(false);
+        return true;
+    }
+
+    const startInfo = () =>{
+        setLoading(true);
         getPostsbyUser(getUser()).then((x) =>{
-            if(!Array.isArray(x)){
-                setError(true);
+            
+            if(!Array.isArray(x) && x !== 0){
+                setGeneralError(true);
                 signOff();
             }
             getPostsTypes().then((y) => {
                 setPostsTypes(y);
             });
             if(x === 0){
+                console.log("no");
                 setNoPosts(true);
             }else{
+                setNoPosts(false);
                 setPosts(x);
             }
-        }).finally(() => setLoading(false));
+        }).finally(() => {
+            setLoading(false);
+            window.scrollTo(0, 0)
+        });
+    }
+
+    const userLoggedIn = () =>{
+        if (localStorage.getItem("08191993") === null) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    useEffect(() => {
+        if(userLoggedIn()){
+            getUserInfo(getUser()).then((x) =>{
+                setFullName(x[0].nombre+' '+x[0].apellido);
+            }).finally(() => setLoading(false));
+            startInfo();
+        }else{
+            signOff();
+        }
     }, []);
 
     return (
         <div >
-            {error ? (<GeneralError></GeneralError>)
+            {generalError ? (<GeneralError></GeneralError>)
             :
                 (<><Modal
                     show={showDelete}
@@ -248,7 +341,7 @@ const Posts = () => {
     
                     <div className="bg-light border-right " id="sidebar-wrapper">
                         <div className="sidebar-heading"><h3>Publicaciones</h3></div>
-                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> @alias</div>
+                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button> {fullName}</div>
                         <div className="list-group list-group-flush">
                             
                             <Link to="/creatives/" className="list-group-item list-group-item-action bg-dark text-white">Mis Posts</Link>
@@ -276,10 +369,10 @@ const Posts = () => {
                                             {editPostStatus ? (
                                                 <div className="row justify-content-center">
                                                     <div className="col-sm-12">
-                                                        <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                        <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost(0)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                                     </div>
                                                     <div className="col-sm-8">
-                                                        <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} postTypes={postsTypes}></EditPost>
+                                                        <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} onChange={(x:number) => cancelEditPost(x)} postTypes={postsTypes}></EditPost>
                                                     </div>
                                                 </div>
                                             ) 
@@ -302,6 +395,30 @@ const Posts = () => {
                                                             Debe ser menor a 115 caracteres.
                                                             </Form.Text>
                                                             {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                                                        </Form.Group>
+                                                        <Form.Group controlId="exampleForm.SelectCustom">
+                                                            <Form.Label>Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></Form.Label>
+                                                            <p></p>
+                                                            <label htmlFor="PostImage">
+                                                                {url ? (
+                                                                    <>
+                                                                    {<img className="card-img-top" src={url} width="300" />}
+                                                                    </>
+                                                                ) : 
+                                                                (
+                                                                    <>
+                                                                        <img className="card-img-top" src={productImagePost} width="300" />
+                                                                        <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
+                                                                        <p>Solo se permiten archivos jpg & png.</p>
+                                                                    </>
+                                                                )}
+                                                            </label>
+                                                            <Form.File accept="image/*"
+                                                                id="PostImage"
+                                                                style={{ display: "none" }}
+                                                                onChange={handleChangeImagePost} />
+                                                            {errorImagePost ? (<div className="alert alert-danger p-1" role="alert">{errorImageTextPost}</div>) : null}
+
                                                         </Form.Group>
     
                                                         <Form.Group controlId="exampleForm.SelectCustom">
@@ -328,8 +445,8 @@ const Posts = () => {
                                                                             }
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
@@ -347,8 +464,8 @@ const Posts = () => {
                                                                             }
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
@@ -366,8 +483,8 @@ const Posts = () => {
                                                                             }
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
@@ -385,8 +502,8 @@ const Posts = () => {
                                                                             }
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
@@ -407,8 +524,8 @@ const Posts = () => {
                                                                             }
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
@@ -437,8 +554,8 @@ const Posts = () => {
                                                                             };
                                                                             return (
                                                                                 <div key={index}>
-                                                                                    <div className="row">
-                                                                                        <div className="col-sm-12">
+                                                                                    <div className="row card">
+                                                                                        <div className="col-sm-12 card-header">
                                                                                             <span className="btn btn-dark btn-sm float-left">{index}</span>
                                                                                             <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>

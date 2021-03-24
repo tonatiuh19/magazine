@@ -14,7 +14,7 @@ const Footer = () => {
     }
 
     return (
-        <footer className="footer mt-auto py-3">
+        <>
             <Modal
                 show={showLogin}
                 onHide={handleCloseLogin}
@@ -27,14 +27,17 @@ const Footer = () => {
                     <Login onChange={handleChange}></Login>
                 </Modal.Body>
             </Modal>
-            <div className="container">
-                <div className="row">
-                    <div className="col-sm-4"><span className="text-muted">Place sticky footer content here.</span></div>
-                    <div className="col-sm-4"></div>
-                    <div className="col-sm-4"><button className="btn btn-link" onClick={() => setShowLogin(true)}>Creativo</button></div>
+            <footer className="footer mt-auto py-3">
+                
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-4"><span className="text-muted">Place sticky footer content here.</span></div>
+                        <div className="col-sm-4"></div>
+                        <div className="col-sm-4"><button className="btn btn-link" onClick={() => setShowLogin(true)}>Creativo</button></div>
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        </>
     )
 }
 

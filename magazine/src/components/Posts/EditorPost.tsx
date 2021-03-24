@@ -28,7 +28,7 @@ const EditorPost = (props:any) => {
     }, []);
 
     return (
-        <div>
+        <div >
             <div className="col-sm-12 mt-2" >
                 <Editor
                     apiKey="fsbuizdicw83hzcfi1qnge8cdxr039npsalv7ek1eh01hddx"
