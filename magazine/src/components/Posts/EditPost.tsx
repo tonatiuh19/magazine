@@ -8,6 +8,7 @@ import ImagePost from './ImagePost';
 import InstagramPost from './InstagramPost';
 import TwitterPost from './TwitterPost';
 import YoutubePost from './YoutubePost';
+import {decode_utf8} from '../../resources/Decode/Decode';
 
 const EditPost = (props:any) => {
     const [title, setTitle] = useState('');
@@ -178,7 +179,7 @@ const EditPost = (props:any) => {
                 type="text" 
                 maxLength={115}
                 onChange={e => {setTitle(e.target.value)}}
-                defaultValue={props.title}
+                defaultValue={decode_utf8(props.title)}
                 placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
                 <Form.Text className="text-muted">
                 Debe ser menor a 115 caracteres.
@@ -216,7 +217,7 @@ const EditPost = (props:any) => {
                     <Form.Label>¿Que categoría?</Form.Label>
                     <Form.Control as="select" custom defaultValue={props.type} onChange={(e:any) => {setCategory(e.target.value)}}>
                         {props.postTypes.map((x:any, index:number) => {
-                            return (<option key={x.id_post_type} value={x.id_post_type}>{x.name}</option>);
+                            return (<option key={x.id_post_type} value={x.id_post_type}>{decode_utf8(x.name)}</option>);
                         })}
                     </Form.Control>
                 </Form.Group>

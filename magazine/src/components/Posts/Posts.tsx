@@ -10,6 +10,7 @@ import { getUserInfo, getPostsbyUser, getPostsTypes, insertPost, insertPostTypes
 import Loading from '../../resources/Loading/Loading';
 import {Form, Modal, Button} from 'react-bootstrap';
 import { useHistory, Link } from "react-router-dom";
+import {decode_utf8} from '../../resources/Decode/Decode';
 import Moment from 'moment';
 
 import ImagePost from './ImagePost';
@@ -399,7 +400,7 @@ const Posts = () => {
                             (<>
                                 {newPostStatus ? 
                                     (
-                                        <div className="container">
+                                        <div className="container mb-5">
                                             {editPostStatus ? (
                                                 <div className="row justify-content-center">
                                                     <div className="col-sm-12">
@@ -460,7 +461,7 @@ const Posts = () => {
                                                             <Form.Control as="select" custom onChange={(e:any) => {setCategory(e.target.value)}}>
                                                                 <option value={category}>...</option>
                                                                 {postsTypes.map((x:any, index) => {
-                                                                    return (<option key={x.id_post_type} value={x.id_post_type}>{x.name}</option>);
+                                                                    return (<option key={x.id_post_type} value={x.id_post_type}>{decode_utf8(x.name)}</option>);
                                                                 })}
                                                             </Form.Control>
                                                             {categoryError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
@@ -658,8 +659,8 @@ const Posts = () => {
                                                                     posts.map((x:any, index) =>{
                                                                         return (<tr key={index}>
                                                                             <th scope="row">{x.id_post}</th>
-                                                                            <td>{x.titulo}</td>
-                                                                            <td>{x.name}</td>
+                                                                            <td>{decode_utf8(x.titulo)}</td>
+                                                                            <td>{decode_utf8(x.name)}</td>
                                                                             <td>{Moment(x.date_created).format('lll')}</td>
                                                                             <td>{0}</td>
                                                                             <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Science from './components/Science/Science';
-import {Navbar, Nav, Button, Form, FormControl} from 'react-bootstrap';
+import {Navbar, Nav, Button, Form, Image} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
 import Footer from './components/Footer/Footer';
@@ -18,6 +18,7 @@ import Movies from './components/Movies/Movies';
 import Technology from './components/Technology/Technology';
 import Culture from './components/Culture/Culture';
 import Anime from './components/Anime/Anime';
+import Logo from './resources/images/Logo/logo.png';
 function App() {
   const [loading, setLoading] = useState(true);
   const [postsTypes, setPostsTypes] = useState([]);
@@ -49,7 +50,7 @@ function App() {
         <>
 
         <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
-          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+          <Navbar.Brand><Link to="/"><Image src={Logo} width="150" fluid /></Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
