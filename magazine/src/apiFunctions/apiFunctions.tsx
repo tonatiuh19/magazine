@@ -386,3 +386,84 @@ export const updateCreative = async (email:string, pwd:string, name:string, last
         return `😱 Request failed: ${e}`;
     }
 };
+
+//DRAW
+
+export const getPostsTypesNavBar = async () =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostTypesNavBar.php',{}
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getPostsHeader = async () =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostHeader.php',{}
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getMainPostsbyType = async (type:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getMainPostsbyType.php',
+            { 
+                id_post_type: type,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getPostInfo = async (idPost:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostInfo.php',
+            { 
+                id_post: idPost,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getMinImage = async (idPost:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getMinImage.php',
+            { 
+                id_post: idPost,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};

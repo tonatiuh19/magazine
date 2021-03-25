@@ -3,12 +3,13 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Science from './components/Science/Science';
 import {Navbar, Nav, Button, Form, Image} from 'react-bootstrap';
+import './styles/stylingBootstrap.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
 import Footer from './components/Footer/Footer';
 import Main from './components/Main/Main';
 import Profile from './components/Posts/Profile';
-import {getPostsTypes} from './apiFunctions/apiFunctions';
+import {getPostsTypesNavBar} from './apiFunctions/apiFunctions';
 import Loading from './resources/Loading/Loading';
 import NewProfile from './components/Posts/NewProfile';
 import Sports from './components/Sports/Sports';
@@ -24,7 +25,7 @@ function App() {
   const [postsTypes, setPostsTypes] = useState([]);
 
   useEffect(() => {
-    getPostsTypes().then((y) => {
+    getPostsTypesNavBar().then((y) => {
       setPostsTypes(y);
   }).finally(() => setLoading(false));
   }, []);
