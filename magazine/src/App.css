@@ -40,3 +40,7 @@ header {
 main {
   flex: 1;
 }
+
+.footerLinks {
+  font-size: 0.8rem;
+}

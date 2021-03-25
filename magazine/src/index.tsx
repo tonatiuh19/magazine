@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom'
-
+document.title = 'Agustirri';
 ReactDOM.render(
   <React.StrictMode>
     <Router forceRefresh={true}>

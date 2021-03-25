@@ -11,8 +11,14 @@ import Profile from './components/Posts/Profile';
 import {getPostsTypes} from './apiFunctions/apiFunctions';
 import Loading from './resources/Loading/Loading';
 import NewProfile from './components/Posts/NewProfile';
+import Sports from './components/Sports/Sports';
+import Videogames from './components/Videogames/Videogames';
+import Music from './components/Music/Music';
+import Movies from './components/Movies/Movies';
+import Technology from './components/Technology/Technology';
+import Culture from './components/Culture/Culture';
+import Anime from './components/Anime/Anime';
 function App() {
-  document.title = 'Agustirri';
   const [loading, setLoading] = useState(true);
   const [postsTypes, setPostsTypes] = useState([]);
 
@@ -20,7 +26,15 @@ function App() {
     getPostsTypes().then((y) => {
       setPostsTypes(y);
   }).finally(() => setLoading(false));
-  }, [])
+  }, []);
+
+  const removeAccents = (str:any) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  } 
+
+  function decode_utf8(s:any) {
+    return decodeURIComponent(escape(s));
+  }
 
   return (
     <div className="App">
@@ -33,19 +47,19 @@ function App() {
       </div>): 
       (
         <>
-          <Navbar bg="dark" variant="dark" fixed="top">
-          <Navbar.Brand href="#home">Logo</Navbar.Brand>
-          <Nav className="mr-auto">
-            {postsTypes.map((x:any, index:number) =>{
-                return (<Nav.Link key={index} href="/creatives">{x.name}</Nav.Link>);
-            })}
-          </Nav>
-          {/* <Form inline>
-            <FormControl type="text" placeholder="Buscar..." className="mr-sm-2" />
-            <Button variant="outline-info">Buscar</Button>
-          </Form> */}
-          
+
+        <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              {postsTypes.map((x:any, index:number) =>{
+                  return (<Nav.Link key={index} href={"/"+removeAccents(x.name.toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
+              })}
+            </Nav>
+          </Navbar.Collapse>
         </Navbar>
+
         <div className="flex-shrink-0 main-container content">
           <main>
             <Router>
@@ -55,6 +69,13 @@ function App() {
                 <Route path="/holaCreativo" component={NewProfile} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/ciencia" component={Science} />
+                <Route path="/deportes" component={Sports} />
+                <Route path="/videojuegos" component={Videogames} />
+                <Route path="/musica" component={Music} />
+                <Route path="/cine" component={Movies} />
+                <Route path="/tecnologia" component={Technology} />
+                <Route path="/cultura" component={Culture} />
+                <Route path="/anime" component={Anime} />
               </Switch>    
             </Router>
           </main>

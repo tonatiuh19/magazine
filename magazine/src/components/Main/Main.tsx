@@ -3,7 +3,11 @@ import React from 'react'
 const Main = () => {
     return (
         <div className="container">
-            <h1>Main</h1>
+            <div className="row">
+                <div className="col-sm-12">
+                    <h1>Main</h1>
+                </div>
+            </div>
         </div>
     )
 }

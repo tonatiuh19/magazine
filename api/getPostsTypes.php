@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=utf-8' );
+ini_set('default_charset', 'utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -11,6 +13,7 @@ if($method == 'POST'){
 	$params = (array) $params;
 
     $sql = "SELECT a.id_post_type, a.name FROM posts_type as a";
+    
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         //echo 'Hola';
