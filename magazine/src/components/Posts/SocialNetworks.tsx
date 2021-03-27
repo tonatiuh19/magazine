@@ -23,7 +23,7 @@ const SocialNetworks = (props:any) => {
     return (
         <div className="row mb-2 text-left">
             <div className="col-sm-4">
-                <div className="form-group form-check">
+                <div className="mb-3 form-check">
                     {props.edit === 1 ? (<input type="checkbox" className="form-check-input" onChange={(e) => checkChange(e)}></input>) 
                     : (<input type="checkbox" className="form-check-input" onChange={(e) => checkChange(e)}></input>)}
                     <label className="form-check-label text-muted">{props.value}</label>

@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Science from './components/Science/Science';
 import {Navbar, Nav, Button, Form, Image} from 'react-bootstrap';
-import './styles/stylingBootstrap.scss'
+import './styles/navBar.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
 import Footer from './components/Footer/Footer';
@@ -20,15 +20,34 @@ import Technology from './components/Technology/Technology';
 import Culture from './components/Culture/Culture';
 import Anime from './components/Anime/Anime';
 import Logo from './resources/images/Logo/logo.png';
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [postsTypes, setPostsTypes] = useState([]);
+  const [isTop, setisTop] = useState(true);
+  const [navBarTheme, setNavBarTheme] = useState<any>("dark");
+
 
   useEffect(() => {
     getPostsTypesNavBar().then((y) => {
       setPostsTypes(y);
   }).finally(() => setLoading(false));
   }, []);
+
+  const listener = () => {
+    if(-document.body.getBoundingClientRect().top > 400){
+      setNavBarTheme("light");
+    }else{
+      setNavBarTheme("dark");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", listener);
+    return () => {
+      window.removeEventListener("scroll", listener);
+    };
+  });
 
   const removeAccents = (str:any) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -50,11 +69,11 @@ function App() {
       (
         <>
 
-        <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+        <Navbar bg={navBarTheme} variant={navBarTheme} fixed="top" expand="lg">
           <Navbar.Brand><Link to="/"><Image src={Logo} width="150" fluid /></Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
+            <Nav className="mr-auto fontBold fw-bolder">
               {postsTypes.map((x:any, index:number) =>{
                   return (<Nav.Link key={index} href={"/"+removeAccents(x.name.toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
               })}

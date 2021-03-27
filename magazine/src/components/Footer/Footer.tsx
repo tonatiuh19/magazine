@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Modal,} from 'react-bootstrap'
+import {Modal} from 'react-bootstrap-v5'
 import Login from '../Login/Login';
 import { FaFacebookF, FaInstagram, FaTwitter, FaArrowAltCircleRight } from 'react-icons/fa';
 
@@ -21,7 +21,7 @@ const Footer = () => {
                 onHide={handleCloseLogin}
                 keyboard={false}
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Iniciar Sesión como creativo</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -38,18 +38,18 @@ const Footer = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <a href="#" className="btn btn-light btn-sm mr-1"><FaFacebookF /></a>
-                                        <a href="#" className="btn btn-light btn-sm mr-1"><FaInstagram /></a>
-                                        <a href="#" className="btn btn-light btn-sm mr-1"><FaTwitter /></a>
+                                        <a href="#" className="btn btn-light btn-sm m-1"><FaFacebookF /></a>
+                                        <a href="#" className="btn btn-light btn-sm m-1"><FaInstagram /></a>
+                                        <a href="#" className="btn btn-light btn-sm m-1"><FaTwitter /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-sm-2"></div>
-                        <div className="col-sm-6 text-right">
+                        <div className="col-sm-6 text-end">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-sm-6">
+                                    <div className="col-sm-6 ">
                                         <br></br>
                                         <br></br>
                                         <br></br>

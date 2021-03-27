@@ -77,7 +77,6 @@ const ImagePost = (props:any) => {
                             ) : 
                             (
                                 <>
-                                    <img className="card-img-top" src={productImage} width="300" />
                                     <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
                                     <p>Solo se permiten archivos jpg & png.</p>
                                 </>

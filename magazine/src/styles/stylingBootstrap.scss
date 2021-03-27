@@ -9,7 +9,7 @@ $pink:    #d63384;
 $red:     #dc3545;
 $orange:  #fd7e14;
 $yellow:  #ffc107;
-$green:   #198754;
+$green:   #2eec94;
 $teal:    #20c997;
 $cyan:    #0dcaf0;
 
@@ -40,7 +40,8 @@ $utilities: map-merge(
       property: color,
       class: text,
       values: map-merge(
-        $theme-colors: (
+        $theme-colors,
+        (
           "primary":    $primary,
           "secondary":  $secondary,
           "success":    $success,

@@ -9,22 +9,67 @@ const PostCard = (props:any) => {
     const [typeName, setTypeName] = useState('');
     const [img, setImg] = useState('');
     const [loading, setLoading] = useState(true);
+    const [styleBtn, setStyleBtn] = useState<any>({});
+    const [styleBGcard, setstyleBGcard] = useState<any>("");
+    const [styleTypecard, setstyleTypecard] = useState<any>("");
 
     useEffect(() =>{
         getPostInfo(props.idPost).then((x) =>{
-            console.log(x);
+            btnTypes(x[0].id_post_type);
             getMinImage(props.idPost).then((y) =>{
                 setImg(y);
                 setTitle(x[0].titulo);
                 setTypeName(x[0].name);
-                setType(x[0].id_post_type);
+                if(props.isHeader === 1){
+                    setstyleBGcard("card-body text-dark");
+                    setstyleTypecard("btn btn-outline-dark btn-sm");
+                }else{
+                    setstyleBGcard("card-body bg-dark text-white");
+                    setstyleTypecard("btn btn-outline-light btn-sm");
+                }
             }).finally(() => setLoading(false));
         });
-    });
+    }, [loading]);
+
+    const btnTypes = (type:number) =>{
+        if(type === 1){
+            setStyleBtn({
+                color: '#4080FF'
+            });
+        }else if(type === 2){
+            setStyleBtn({
+                color: '#219634'
+            });
+        }else if(type === 3){
+            setStyleBtn({
+                color: '#123456'
+            });
+        }else if(type === 4){
+            setStyleBtn({
+                color: '#ad8980'
+            });
+        }else if(type === 5){
+            setStyleBtn({
+                color: '#617B92'
+            });
+        }else if(type === 6){
+            setStyleBtn({
+                color: '#F00000'
+            });
+        }else if(type === 7){
+            setStyleBtn({
+                color: '#098765'
+            });
+        }else if(type === 8){
+            setStyleBtn({
+                color: '#955286'
+            });
+        }
+    }   
 
 
     return (
-        <a href="" className="text-dark card">
+        <div>
             {loading ? (<div className="container">
                 <div id="inner" className="row">
                 <div className="col-12 text-center">
@@ -33,12 +78,13 @@ const PostCard = (props:any) => {
                 </div>
             </div>
             ) 
-            : (<div className="card col-sm-12">
-                <img src={img} className="card-img-top p-2" height="195" alt="..." />
-                <div className="card-body">
+            : (<div className="card h-100 border-dark post-card">
+                <a href="" style={{textDecoration: 'none'}}>
+                <img src={img} className="card-img-top p-2" alt="..." />
+                <div className={styleBGcard}>
                     <div className="row text-center">
                         <div className="col-sm-12 mb-2">
-                            <button className="btn btn-outline-cyan btn-sm">{decode_utf8(typeName)}</button>
+                            <button className={styleTypecard} style={styleBtn}>{decode_utf8(typeName)}</button>
                         </div>
                     </div>
                     <div className="row">
@@ -47,10 +93,11 @@ const PostCard = (props:any) => {
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
             )}
-            
-        </a>
+        </div>  
+       
     )
 }
 

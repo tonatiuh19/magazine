@@ -15,7 +15,8 @@ if($method == 'POST'){
 
 		$sql = "SELECT a.id_post, a.content, a.rating, a.approved, a.id_post_type, a.date_created, a.titulo, b.name FROM posts as a
 		INNER JOIN posts_type as b on a.id_post_type=b.id_post_type
-		WHERE a.active=1 AND a.id_user=".$idUser."";
+		WHERE a.active=1 AND a.id_user=".$idUser."
+		ORDER BY date_created desc";
 
 		$result = $conn->query($sql);
 		if ($result->num_rows > 0) {

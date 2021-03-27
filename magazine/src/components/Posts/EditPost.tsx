@@ -173,22 +173,16 @@ const EditPost = (props:any) => {
             : 
             (<Form>
                 <h5># {props.idPost}</h5>
-                <Form.Group controlId="formBasicEmail">
-                <Form.Label>Titulo del Articulo/Post/Noticia/Nota</Form.Label>
-                <Form.Control 
-                type="text" 
-                maxLength={115}
-                onChange={e => {setTitle(e.target.value)}}
-                defaultValue={decode_utf8(props.title)}
-                placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
-                <Form.Text className="text-muted">
-                Debe ser menor a 115 caracteres.
-                </Form.Text>
-                {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
-                </Form.Group>
+                <div className="mb-3">
+                    <label className="form-label">Titulo del Articulo/Post/Noticia/Nota</label>
+                    <input type="text" maxLength={115} defaultValue={decode_utf8(props.title)} onChange={e => {setTitle(e.target.value)}} className="form-control" placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
+                    <div id="emailHelp" className="form-text">Debe ser menor a 115 caracteres.</div>
+                    {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                </div>
+                <hr></hr>
 
-                <Form.Group controlId="exampleForm.SelectCustom">
-                    <Form.Label>Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></Form.Label>
+                <div className="mb-3">
+                    <label className="form-label">Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></label>
                     <p></p>
                     <label htmlFor="PostImage">
                         {url ? (
@@ -199,28 +193,30 @@ const EditPost = (props:any) => {
                             </>
                         ) : 
                         (
-                        <>
-                            <img className="card-img-top" src={productImagePost} width="300" />
-                            <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
-                            <p>Solo se permiten archivos jpg & png.</p>
-                        </>
+                            <>
+                                <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
+                                <p>Solo se permiten archivos jpg & png.</p>
+                            </>
                         )}
                     </label>
-                    <Form.File accept="image/*"
+                    <input type="file" className="form-control" accept="image/*"
                         id="PostImage"
                         style={{ display: "none" }}
                         onChange={handleChangeImagePost} />
                     {errorImagePost ? (<div className="alert alert-danger p-1" role="alert">{errorImageTextPost}</div>) : null}
+                </div>
+                <hr></hr>
 
-                </Form.Group>
-                <Form.Group controlId="exampleForm.SelectCustom">
-                    <Form.Label>¿Que categoría?</Form.Label>
-                    <Form.Control as="select" custom defaultValue={props.type} onChange={(e:any) => {setCategory(e.target.value)}}>
+                <div className="input-group mb-3">
+                    <label className="input-group-text" >¿Que categoría?</label>
+                    <select className="form-select" defaultValue={props.type} onChange={(e:any) => {setCategory(e.target.value)}}>
                         {props.postTypes.map((x:any, index:number) => {
                             return (<option key={x.id_post_type} value={x.id_post_type}>{decode_utf8(x.name)}</option>);
                         })}
-                    </Form.Control>
-                </Form.Group>
+                    </select>
+                </div>
+                <hr></hr>
+
                 {postsAttachments.sort((a:any, b:any) => a.order_post - b.order_post).map((x:any, index:any) =>{
                     
                     if(x.id_post_attachment_type === 6){
@@ -233,9 +229,9 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                     </div>
-                                    <EditorPost onChange={handleEditorChange} content={x.content} isEditing={1}></EditorPost>
+                                    <EditorPost onChange={handleEditorChange} content={decode_utf8(x.content)} isEditing={1}></EditorPost>
                                 </div>
                                 <hr></hr>
                             </div>
@@ -251,7 +247,7 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                     </div>
                                     <YoutubePost onChange={handleEditorChange} content={x.content} isEditing={1}></YoutubePost>
                                 </div>
@@ -269,7 +265,7 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                         
                                     </div>
                                     <InstagramPost onChange={handleEditorChange} content={x.content} isEditing={1}></InstagramPost>
@@ -288,7 +284,7 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                         
                                     </div>
                                     <div className="col-sm-12 mt-2" >
@@ -310,7 +306,7 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                         
                                     </div>
                                     <div className="col-sm-12 mt-2" >
@@ -338,14 +334,14 @@ const EditPost = (props:any) => {
                             <div key={index}>
                                 <div className="row card">
                                     <div className="col-sm-12 card-header">
-                                        <span className="btn btn-dark btn-sm float-left">{x.order_post}</span>
+                                        <span className="btn btn-dark btn-sm float-start">{x.order_post}</span>
                                         
                                     </div>
                                     <div className="col-sm-12 mt-2 justify-content-center" >
                                         <ImagePost onChange={handleChangeImage} idPostAttach={x.id_post_attachment} order={index} isEditing={1}></ImagePost>
                                         <Form.Group controlId="formBasicEmail">
                                             <Form.Label>Pie de foto</Form.Label>
-                                            <Form.Control type="text" defaultValue={x.content} onChange={(e) => handleEditorChange(e.target.value)} />
+                                            <Form.Control type="text" defaultValue={decode_utf8(x.content)} onChange={(e) => handleEditorChange(e.target.value)} />
                                         </Form.Group>
                                     </div>
                                 </div>
@@ -355,7 +351,7 @@ const EditPost = (props:any) => {
                     }
                 })}
                 {error ? (<div className="alert alert-danger" role="alert">{errorText}</div>) : null}
-                {true ? (<button className="btn btn-primary float-right" onClick={(e) => update(e)}>Actualizar</button>) : null}
+                {true ? (<button className="btn btn-primary float-end" onClick={(e) => update(e)}>Actualizar</button>) : null}
             </Form>)}
             
             

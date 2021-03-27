@@ -10,18 +10,19 @@ if($method == 'POST'){
 	$params= json_decode($requestBody);
 	$params = (array) $params;
 
-    $sql = "SELECT t1.id_post, t1.id_user, t1.id_post_type, t1.titulo, t1.date_created FROM posts as t1
-    INNER JOIN 
-    (
-       SELECT MAX(id_post_type) AS ID, MAX(date_created) AS MAXDATE
-       FROM posts
-       GROUP BY id_post_type
-    ) t2
-    ON t1.id_post_type = t2.ID
-    AND t1.date_created = t2.MAXDATE
-    AND t1.active <> 0
-    ORDER by t1.date_created DESC
-    LIMIT 4";
+    $sql = "SELECT t1.id_post, t1.id_user, t1.id_post_type, t1.titulo, t1.date_created, b.name FROM posts as t1
+    INNER JOIN posts_type as b on b.id_post_type=t1.id_post_type
+        INNER JOIN 
+        (
+           SELECT MAX(id_post_type) AS ID, MAX(date_created) AS MAXDATE
+           FROM posts
+           GROUP BY id_post_type
+        ) t2
+        ON t1.id_post_type = t2.ID
+        AND t1.date_created = t2.MAXDATE
+        AND t1.active <> 0
+        ORDER by t1.date_created DESC
+        LIMIT 4";
     
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {

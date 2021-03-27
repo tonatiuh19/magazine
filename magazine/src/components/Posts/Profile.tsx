@@ -206,7 +206,7 @@ const Posts = () => {
                 <div className="bg-light border-right " id="sidebar-wrapper">
                     <div className="sidebar-heading"><h3>Perfil</h3></div>
                     <div className="sidebar-heading">
-                        <button className="btn btn-sm btn-outline-dark mr-1" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button>
+                        <button className="btn btn-sm btn-outline-dark me-1" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button>
                         <button className="btn btn-sm btn-outline-dark" onClick={() => help()}><FontAwesomeIcon icon={faQuestion} /></button>
                     </div>
                     <div className="list-group list-group-flush">

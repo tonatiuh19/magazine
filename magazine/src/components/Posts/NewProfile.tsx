@@ -168,7 +168,7 @@ const NewProfile = () => {
                 backdrop="static"
                 keyboard={false}
             >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Te haz registrado con exito  <FaMagic /></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -190,26 +190,26 @@ const NewProfile = () => {
                     <div className="col-sm-8">
                         
                         <Form>
-                            <Form.Group>
-                                {validation.mail ? (<Form.Control type="email" className="border border-danger" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />) 
-                                : (<Form.Control type="email" className="border border-secondary" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />)}
-                            </Form.Group>
-                            <Form.Group>
-                                {validation.pwd ? (<Form.Control type="password" className="border border-danger" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />) 
-                                : (<Form.Control type="password" className="border border-secondary" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />)}
-                            </Form.Group>
-                            <Form.Group>
+                            <div className="mb-3">
+                                {validation.mail ? (<input type="email" className="form-control border border-danger" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />) 
+                                : (<input type="email" className="form-control border border-secondary" onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electronico" />)}
+                            </div>
+                            <div className="mb-3">
+                                {validation.pwd ? (<input type="password" className="form-control border border-danger" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />) 
+                                : (<input type="password" className="form-control border border-secondary" onChange={(e) => setPwd(e.target.value)} placeholder="Escribe una contraseña" />)}
+                            </div>
+                            <div className="mb-3">
                                 <Row>
                                     <Col>
-                                        {validation.firstName ? (<Form.Control className="border border-danger" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />) 
-                                        : (<Form.Control className="border border-secondary" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />)}
+                                        {validation.firstName ? (<input className="form-control border border-danger" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />) 
+                                        : (<input className="form-control border border-secondary" onChange={(e) => setFirstName(e.target.value)} placeholder="Primer Nombre" />)}
                                     </Col>
                                     <Col>
-                                        {validation.lastName ? (<Form.Control className="border border-danger" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />) 
-                                        : (<Form.Control className="border border-secondary" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />)}
+                                        {validation.lastName ? (<input className="border border-danger" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />) 
+                                        : (<input className="form-control border border-secondary" onChange={(e) => setLastName(e.target.value)} placeholder="Apellido" />)}
                                     </Col>
                                 </Row>
-                            </Form.Group>
+                            </div>
 
                             <div className={validation.socials ? "container border border-danger rounded mb-2" : "container border border-secondary rounded mb-2"}>
                                 <div className="row text-left">
@@ -229,10 +229,10 @@ const NewProfile = () => {
                                 })}                            
                             </div>
                             
-                            <Form.Group>
-                                {validation.justification ? (<Form.Control className="border border-danger" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />) 
-                                : (<Form.Control className="border border-secondary" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" as="textarea" rows={3} />)}
-                            </Form.Group>
+                            <div className="mb-3">
+                                {validation.justification ? (<textarea className="form-control border border-danger" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" rows={3} />) 
+                                : (<textarea className="form-control border border-secondary" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?"  rows={3} />)}
+                            </div>
                             {generalValidation ? (<div className="container">
                                 <div className="row">
                                     <div className="col-sm-12">
@@ -242,14 +242,14 @@ const NewProfile = () => {
                                     </div>
                                 </div>
                             </div>) : null}
-                            <Form.Group>
+                            <div className="mb-3">
                                 <button className="btn btn-outline-success col-sm-12" onClick={(e) =>sendForm(e)}>Enviar</button>
-                            </Form.Group>
-                            <Form.Group>
+                            </div>
+                            <div className="mb-3">
                                 <div className="form-check">
                                     <label className="form-check-label text-muted" >Al enviar acepto <a href="">Terminos y condiciones</a> y <a href="">Politicas de privacidad.</a></label>
                                 </div>
-                            </Form.Group>
+                            </div>
                           
                         </Form>
                     </div>

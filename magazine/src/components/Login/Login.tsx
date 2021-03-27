@@ -72,15 +72,15 @@ const Login = (props:any) => {
             <div className="">
                 <div className="">
                     <div>
-                        <div className="form-group">
+                        <div className="mb-3">
                             <input type="email" className="form-control" placeholder="Correo electronico" onChange={(e) => setEmail(e.target.value)} value={email} />
                         </div>
-                        <div className="form-group">
+                        <div className="mb-3">
                             <input type="password" className="form-control" placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)} value={password} />
                         </div>
                         {error ? (<div className="alert alert-danger" role="alert">{errorMessage}</div>) : null}
                         <button type="submit" className="btn btn-primary btn-block" onClick={() => signInValidation()}>Entrar</button>
-                        <p className="forgot-password text-right">
+                        <p className="forgot-password text-end">
                             {/*<a href="#">Olvide mi contraseña</a>*/}
                         </p>
                         {loading ?

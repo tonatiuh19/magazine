@@ -344,7 +344,7 @@ const Posts = () => {
                     backdrop="static"
                     keyboard={false}
                 >
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title>Tu cuenta aun no se encuentra activa</Modal.Title>
                     </Modal.Header>
                     <Modal.Footer>
@@ -359,8 +359,9 @@ const Posts = () => {
                     backdrop="static"
                     keyboard={false}
                 >
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title>¿Estas seguro?</Modal.Title>
+                        <button type="button" className="btn-close" onClick={() => {handleCloseDelete(); setDeletePost(0)}}></button>
                     </Modal.Header>
                     
                     <Modal.Footer>
@@ -374,7 +375,7 @@ const Posts = () => {
     
                     <div className="bg-light border-right " id="sidebar-wrapper">
                         <div className="sidebar-heading"><h3>Publicaciones</h3></div>
-                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark mr-1" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button>
+                        <div className="sidebar-heading"><button className="btn btn-sm btn-outline-dark me-1" onClick={() => signOff()}><FontAwesomeIcon icon={faPowerOff} /></button>
                         <button className="btn btn-sm btn-outline-dark" onClick={() => help()}><FontAwesomeIcon icon={faQuestion} /></button>
                         </div>
                         <div className="list-group list-group-flush">
@@ -403,8 +404,8 @@ const Posts = () => {
                                         <div className="container mb-5">
                                             {editPostStatus ? (
                                                 <div className="row justify-content-center">
-                                                    <div className="col-sm-12">
-                                                        <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelEditPost(0)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                    <div className="col-sm-12 mt-2">
+                                                        <div className="float-end"><button className="btn btn-outline-danger" onClick={() => cancelEditPost(0)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                                     </div>
                                                     <div className="col-sm-8">
                                                         <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} onChange={(x:number) => cancelEditPost(x)} postTypes={postsTypes}></EditPost>
@@ -414,25 +415,20 @@ const Posts = () => {
                                             : 
                                             (
                                             <div className="row justify-content-center">
-                                                <div className="col-sm-12">
-                                                    <div className="float-right"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
+                                                <div className="col-sm-12 mt-2">
+                                                    <div className="float-end"><button className="btn btn-outline-danger" onClick={() => cancelPost()}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                                 </div>
                                                 <div className="col-sm-8">
                                                     <Form>
-                                                        <Form.Group controlId="formBasicEmail">
-                                                            <Form.Label>Titulo del Articulo/Post/Noticia/Nota</Form.Label>
-                                                            <Form.Control 
-                                                                type="text" 
-                                                                maxLength={115}
-                                                                onChange={e => {setTitle(e.target.value)}}
-                                                                placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
-                                                            <Form.Text className="text-muted">
-                                                            Debe ser menor a 115 caracteres.
-                                                            </Form.Text>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Titulo del Articulo/Post/Noticia/Nota</label>
+                                                            <input type="text" maxLength={115} onChange={e => {setTitle(e.target.value)}} className="form-control" placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
+                                                            <div id="emailHelp" className="form-text">Debe ser menor a 115 caracteres.</div>
                                                             {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
-                                                        </Form.Group>
-                                                        <Form.Group controlId="exampleForm.SelectCustom">
-                                                            <Form.Label>Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></Form.Label>
+                                                        </div>
+                                                        <hr></hr>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></label>
                                                             <p></p>
                                                             <label htmlFor="PostImage">
                                                                 {url ? (
@@ -442,30 +438,29 @@ const Posts = () => {
                                                                 ) : 
                                                                 (
                                                                     <>
-                                                                        <img className="card-img-top" src={productImagePost} width="300" />
                                                                         <h5 className="btn btn-primary">Seleccionar nueva imagen</h5>
                                                                         <p>Solo se permiten archivos jpg & png.</p>
                                                                     </>
                                                                 )}
                                                             </label>
-                                                            <Form.File accept="image/*"
+                                                            <input type="file" className="form-control" accept="image/*"
                                                                 id="PostImage"
                                                                 style={{ display: "none" }}
                                                                 onChange={handleChangeImagePost} />
                                                             {errorImagePost ? (<div className="alert alert-danger p-1" role="alert">{errorImageTextPost}</div>) : null}
-
-                                                        </Form.Group>
-    
-                                                        <Form.Group controlId="exampleForm.SelectCustom">
-                                                            <Form.Label>¿Que categoría?</Form.Label>
-                                                            <Form.Control as="select" custom onChange={(e:any) => {setCategory(e.target.value)}}>
+                                                        </div>
+                                                        <hr></hr>
+                                                        <div className="input-group mb-3">
+                                                            <label className="input-group-text" >¿Que categoría?</label>
+                                                            <select className="form-select" onChange={(e:any) => {setCategory(e.target.value)}}>
                                                                 <option value={category}>...</option>
                                                                 {postsTypes.map((x:any, index) => {
                                                                     return (<option key={x.id_post_type} value={x.id_post_type}>{decode_utf8(x.name)}</option>);
                                                                 })}
-                                                            </Form.Control>
+                                                            </select>
                                                             {categoryError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
-                                                        </Form.Group>
+                                                        </div>
+                                                        <hr></hr>
                                                         <label>¿Que quisieras añadir?</label>
                                                         <div className="col-sm-12">
                                                             {renderAdd()}
@@ -482,8 +477,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <EditorPost onChange={handleEditorChange} isEditing={0}></EditorPost>
                                                                                     </div>
@@ -501,8 +496,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <YoutubePost onChange={handleEditorChange} isEditing={0}></YoutubePost>
                                                                                     </div>
@@ -520,8 +515,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <InstagramPost onChange={handleEditorChange} isEditing={0}></InstagramPost>
                                                                                     </div>
@@ -539,8 +534,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <div className="col-sm-12 mt-2" >
                                                                                         <TwitterPost onChange={handleEditorChange} isEditing={0}></TwitterPost>
@@ -561,8 +556,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <div className="col-sm-12 mt-2" >
                                                                                         <FacebookPost onChange={handleEditorChange} isEditing={0}></FacebookPost>
@@ -591,8 +586,8 @@ const Posts = () => {
                                                                                 <div key={index}>
                                                                                     <div className="row card">
                                                                                         <div className="col-sm-12 card-header">
-                                                                                            <span className="btn btn-dark btn-sm float-left">{index}</span>
-                                                                                            <button className="btn btn-danger btn-sm float-right" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
+                                                                                            <span className="btn btn-dark btn-sm float-start">{index}</span>
+                                                                                            <button className="btn btn-danger btn-sm float-end" onClick={(e) => handleRemoveItem(e, index)}><FiDelete /></button>
                                                                                         </div>
                                                                                         <div className="col-sm-12 mt-2 justify-content-center" >
                                                                                             <ImagePost onChange={handleChangeImage} order={index} isEditing={0}></ImagePost>
@@ -614,7 +609,7 @@ const Posts = () => {
                                                             <div className="col-sm-12">
                                                                 {error ? (<div className="alert alert-danger" role="alert">{errorText}</div>) : null}
                                                                 
-                                                                {postNewContent.length >= 2 ? (<button className="btn btn-success float-right" onClick={(e) => publish(e)}>Publicar</button>) : null}
+                                                                {postNewContent.length >= 2 ? (<button className="btn btn-success float-end" onClick={(e) => publish(e)}>Publicar</button>) : null}
                                                             </div>        
                                                         </div>
                                                     </Form>
@@ -638,8 +633,8 @@ const Posts = () => {
                                         ): (
                                             <div className="container">
                                                 <div className="row">
-                                                    <div className="col-sm-12">
-                                                        <div className="float-right"><button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button></div>
+                                                    <div className="col-sm-12 mt-2">
+                                                        <div className="float-end"><button className="btn btn-outline-success" onClick={() => setNewPostStatus(true)}><FontAwesomeIcon icon={faPlusCircle} /> Nuevo post</button></div>
                                                     </div>
                                                     <div className="col-sm-12">
                                                         <table className="table">
