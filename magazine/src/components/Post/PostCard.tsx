@@ -17,19 +17,17 @@ const PostCard = (props:any) => {
     useEffect(() =>{
         getPostInfo(props.idPost).then((x) =>{
             btnTypes(x[0].id_post_type);
-            getMinImage(props.idPost).then((y) =>{
-                setImg(y);
-                setTitle(x[0].titulo);
-                setTypeName(x[0].name);
-                if(props.isHeader === 1){
-                    setstyleBGcard("card-body text-dark");
-                    setstyleTypecard("btn btn-outline-dark btn-sm");
-                }else{
-                    setstyleBGcard("card-body bg-dark text-white");
-                    setstyleTypecard("btn btn-outline-light btn-sm");
-                }
-            }).finally(() => setLoading(false));
-        });
+            setImg(x[0].img);
+            setTitle(x[0].titulo);
+            setTypeName(x[0].name);
+            if(props.isHeader === 1){
+                setstyleBGcard("card-body text-dark");
+                setstyleTypecard("btn btn-outline-dark btn-sm");
+            }else{
+                setstyleBGcard("card-body bg-dark text-white");
+                setstyleTypecard("btn btn-outline-light btn-sm");
+            }
+        }).finally(()=> setLoading(false));
     }, [loading]);
 
     const btnTypes = (type:number) =>{

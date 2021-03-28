@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Science from './components/Science/Science';
-import {Navbar, Nav, Button, Form, Image} from 'react-bootstrap';
+import {Navbar, Nav, Image} from 'react-bootstrap';
 import './styles/navBar.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Posts from './components/Posts/Posts';
@@ -24,7 +24,6 @@ import Logo from './resources/images/Logo/logo.png';
 function App() {
   const [loading, setLoading] = useState(true);
   const [postsTypes, setPostsTypes] = useState([]);
-  const [isTop, setisTop] = useState(true);
   const [navBarTheme, setNavBarTheme] = useState<any>("dark");
 
 
@@ -70,12 +69,12 @@ function App() {
         <>
 
         <Navbar bg={navBarTheme} variant={navBarTheme} fixed="top" expand="lg">
-          <Navbar.Brand><Link to="/"><Image src={Logo} width="150" fluid /></Link></Navbar.Brand>
+          <Navbar.Brand className="ms-2"><Link to="/"><Image src={Logo} width="150" fluid /></Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto fontBold fw-bolder">
               {postsTypes.map((x:any, index:number) =>{
-                  return (<Nav.Link key={index} href={"/"+removeAccents(decode_utf8(x.name).toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
+                  return (<Nav.Link key={index} className="socialNetworkPost rounded" href={"/"+removeAccents(decode_utf8(x.name).toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
               })}
             </Nav>
           </Navbar.Collapse>

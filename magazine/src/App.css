@@ -58,3 +58,8 @@ main {
 .post-card:hover {
   border: 2px solid #3E7DC0;
 }
+
+
+.socialNetworkPost:hover {
+  border: 1px solid #ffffff;
+}

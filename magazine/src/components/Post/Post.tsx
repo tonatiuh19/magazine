@@ -93,19 +93,19 @@ const Post = (props:any) => {
                     <small className="mt-2">{'por: '+author+' | '+firsLetterUpperCase(date)+' | '}{ 
                         socialUserNetworks.map((x:any, index:any) =>{
                             if(x.id_creatives_social_networks_type === 1){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaInstagram /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaInstagram /></a>);
                             }else if(x.id_creatives_social_networks_type === 2){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaFacebookF /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaFacebookF /></a>);
                             }else if(x.id_creatives_social_networks_type === 3){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaTwitter /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaTwitter /></a>);
                             }else if(x.id_creatives_social_networks_type === 4){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaLinkedinIn /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaLinkedinIn /></a>);
                             }else if(x.id_creatives_social_networks_type === 5){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><SiTiktok /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><SiTiktok /></a>);
                             }else if(x.id_creatives_social_networks_type === 6){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaYoutube /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaYoutube /></a>);
                             }else if(x.id_creatives_social_networks_type === 7){
-                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white" href={x.value} target="_blank"><FaGithub /></a>);
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaGithub /></a>);
                             }
                         })
                     }</small>

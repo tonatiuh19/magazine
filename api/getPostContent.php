@@ -26,7 +26,7 @@ if($method == 'POST'){
 				$array[] = array_map('utf8_encode', $row);
 			}
 
-            $sql2 = "SELECT a.id_post_attachment, a.id_post_attachment_type, a.content, a.order_post, a.date FROM posts_attachment as a
+            $sql2 = "SELECT a.id_post_attachment, a.id_post_attachment_type, a.content, a.order_post, a.img, a.date FROM posts_attachment as a
             WHERE a.active=1 and a.id_post=".$idPost."
             ORDER BY a.order_post ASC";
             $result2 = $conn->query($sql2);

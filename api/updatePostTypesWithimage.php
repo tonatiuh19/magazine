@@ -52,10 +52,21 @@ if($_POST['id_post'])
                     $types = array('image/jpeg', 'image/jpg', 'image/png');  
 
                     if(move_uploaded_file($_FILES['avatar']['tmp_name'], $newname)){
-                        $response = array(
-                            "status" => "1",
-                            "message" => "File uploaded!"
-                        );
+
+                        foreach(glob('storage/images/'.$idAttachment.'/*.{jpg,pdf,png,PNG}', GLOB_BRACE) as $file) {
+                            //echo $file;
+                            $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/".$file;
+                            $sqlx = "UPDATE posts_attachment SET img='$actual_link' WHERE id_post_attachment=".$last_id."";
+        
+                            if ($conn->query($sqlx) === TRUE) {
+                                $response = array(
+                                    "status" => "1",
+                                    "message" => "File uploaded!"
+                                );
+                            } else {
+                                echo "Error updating record: " . $conn->error;
+                            }
+                        }
                     }
                     
                 } else {
@@ -108,10 +119,21 @@ if($_POST['id_post'])
                         if (preg_match('/(\.jpg|\.jpeg|\.png|\.bmp)$/', $file)) {
                             $fileName = substr($file, strrpos($file, '/') + 1);
                             if(copy($file, "storage/images/".$idAttachment."/".$fileName)){
-                                $response = array(
-                                    "status" => "1",
-                                    "message" => "File uploaded!"
-                                );
+
+                                foreach(glob('storage/images/'.$idAttachment.'/*.{jpg,pdf,png,PNG}', GLOB_BRACE) as $file) {
+                                    //echo $file;
+                                    $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/".$file;
+                                    $sqlx = "UPDATE posts_attachment SET img='$actual_link' WHERE id_post_attachment=".$last_id."";
+                
+                                    if ($conn->query($sqlx) === TRUE) {
+                                        $response = array(
+                                            "status" => "1",
+                                            "message" => "File uploaded!"
+                                        );
+                                    } else {
+                                        echo "Error updating record: " . $conn->error;
+                                    }
+                                }
                             
                             } else {
                                 $response = array(

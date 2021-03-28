@@ -38,9 +38,9 @@ const Footer = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <a href="#" className="btn btn-light btn-sm m-1"><FaFacebookF /></a>
-                                        <a href="#" className="btn btn-light btn-sm m-1"><FaInstagram /></a>
-                                        <a href="#" className="btn btn-light btn-sm m-1"><FaTwitter /></a>
+                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaFacebookF /></a>
+                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaInstagram /></a>
+                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaTwitter /></a>
                                     </div>
                                 </div>
                             </div>
@@ -53,14 +53,14 @@ const Footer = () => {
                                         <br></br>
                                         <br></br>
                                         <br></br>
-                                        <button className="btn btn-link text-white footerLinks" onClick={() => setShowLogin(true)}><small className="footerLinks"><FaArrowAltCircleRight /> Creativo</small></button>
+                                        <button className="btn btn-link text-white footerLinks socialNetworkPost" style={{textDecoration: 'none'}} onClick={() => setShowLogin(true)}><small className="footerLinks"><FaArrowAltCircleRight /> Creativo</small></button>
                                     </div>
                                     <div className="col-sm-6">
-                                        <a className="btn btn-link text-white" href=""><small className="footerLinks"><FaArrowAltCircleRight /> Anúnciate con nosotros</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Anúnciate con nosotros</small></a>
                                         <br></br>
-                                        <a className="btn btn-link text-white" href=""><small className="footerLinks"><FaArrowAltCircleRight /> Términos y condiciones</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Términos y condiciones</small></a>
                                         <br></br>
-                                        <a className="btn btn-link text-white" href=""><small className="footerLinks"><FaArrowAltCircleRight /> Aviso de privacidad</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Aviso de privacidad</small></a>
                                     </div>
                                 </div>
                             </div>
