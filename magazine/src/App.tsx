@@ -19,12 +19,14 @@ import Movies from './components/Movies/Movies';
 import Technology from './components/Technology/Technology';
 import Culture from './components/Culture/Culture';
 import Anime from './components/Anime/Anime';
-import Logo from './resources/images/Logo/logo.png';
+import LogoWhite from './resources/images/Logo/logo_white.png';
+import LogoBlack from './resources/images/Logo/logo_black.png';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [postsTypes, setPostsTypes] = useState([]);
   const [navBarTheme, setNavBarTheme] = useState<any>("dark");
+  const [logo, setLogo] = useState(LogoWhite);
 
 
   useEffect(() => {
@@ -36,8 +38,10 @@ function App() {
   const listener = () => {
     if(-document.body.getBoundingClientRect().top > 400){
       setNavBarTheme("light");
+      setLogo(LogoBlack);
     }else{
       setNavBarTheme("dark");
+      setLogo(LogoWhite);
     }
   };
 
@@ -69,12 +73,12 @@ function App() {
         <>
 
         <Navbar bg={navBarTheme} variant={navBarTheme} fixed="top" expand="lg">
-          <Navbar.Brand className="ms-2"><Link to="/"><Image src={Logo} width="150" fluid /></Link></Navbar.Brand>
+          <Navbar.Brand className="ms-2"><Link to="/"><Image src={logo} width="150" fluid /></Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto fontBold fw-bolder">
               {postsTypes.map((x:any, index:number) =>{
-                  return (<Nav.Link key={index} className="socialNetworkPost rounded" href={"/"+removeAccents(decode_utf8(x.name).toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
+                  return (<Nav.Link key={index} className="socialNetworkPost rounded" href={"/"+removeAccents(decode_utf8(x.name.replace(/\s/g, '')).toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
               })}
             </Nav>
           </Navbar.Collapse>
@@ -92,7 +96,7 @@ function App() {
                 <Route path="/deportes/:id/:titulo" component={Sports} />
                 <Route path="/videojuegos/:id/:titulo" component={Videogames} />
                 <Route path="/musica/:id/:titulo" component={Music} />
-                <Route path="/cine/:id/:titulo" component={Movies} />
+                <Route path="/cineytv/:id/:titulo" component={Movies} />
                 <Route path="/tecnologia/:id/:titulo" component={Technology} />
                 <Route path="/cultura/:id/:titulo" component={Culture} />
                 <Route path="/anime/:id/:titulo" component={Anime} />
