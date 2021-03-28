@@ -32,7 +32,9 @@ const Posts = () => {
     const [editPostStatus, setEditPostStatus] = useState(false);
     const [errorText, setErrorText] = useState('');
     const [title, setTitle] = useState('');
+    const [short, setShort] = useState('');
     const [titleError, setTitleError] = useState(false);
+    const [shortError, setShortError] = useState(false);
     const [category, setCategory] = useState(0);
     const [categoryError, setCategoryError] = useState(false);
     const [error, setError] = useState(false);
@@ -101,6 +103,13 @@ const Posts = () => {
             setTitleError(false);
         }
 
+        if(short === ''){
+            setShortError(true);
+            return false;
+        }else{
+            setShortError(false);
+        }
+
         if(image.raw === ""){
             setErrorImagePost(true);
             return false;
@@ -165,7 +174,7 @@ const Posts = () => {
         }else{
             setError(false);
             setLoading(true);
-            insertPost(getUser(), title, category).then((x) => {
+            insertPost(getUser(), title, category, short).then((x) => {
                 insertPostImage(image.raw, x[0].id_post).finally(() => setLoading(false));
                 Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
                     console.log(results);
@@ -421,10 +430,17 @@ const Posts = () => {
                                                 <div className="col-sm-8">
                                                     <Form>
                                                         <div className="mb-3">
-                                                            <label className="form-label">Titulo del Articulo/Post/Noticia/Nota</label>
+                                                            <label className="form-label">Titulo del Articulo/Post/Noticia/Nota/Reseña/etc</label>
                                                             <input type="text" maxLength={115} onChange={e => {setTitle(e.target.value)}} className="form-control" placeholder="Ej. Facebook: Ahora facebook permite publicar videos..." />
                                                             <div id="emailHelp" className="form-text">Debe ser menor a 115 caracteres.</div>
                                                             {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                                                        </div>
+                                                        <hr></hr>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">Descripción corta del Articulo/Post/Noticia/Nota/Reseña/etc</label>
+                                                            <textarea className="form-control" maxLength={250} onChange={e => {setShort(e.target.value)}} rows={3}></textarea>
+                                                            <div id="emailHelp" className="form-text">Debe ser menor a 250 caracteres.</div>
+                                                            {shortError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                                                         </div>
                                                         <hr></hr>
                                                         <div className="mb-3">

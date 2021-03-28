@@ -20,7 +20,7 @@ if($method == 'POST'){
         ) t2
         ON t1.id_post_type = t2.ID
         AND t1.date_created = t2.MAXDATE
-        AND t1.active <> 0
+        AND t1.active = 1
         ORDER by t1.date_created DESC
         LIMIT 4";
     

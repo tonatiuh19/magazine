@@ -80,13 +80,14 @@ export const getSocialNetworks = async () =>{
     }
 };
 
-export const insertPost = async (idUser:number, title:string, category:number) =>{
+export const insertPost = async (idUser:number, title:string, category:number, short:string) =>{
     try {
         const response = await axios.post('http://localhost:8015/insertPost.php',
             { 
                 id_user: idUser,
                 title: title,
                 category: category,
+                short: short,
             }
         );
         if(response.data === 0){
@@ -170,7 +171,7 @@ export const getImageAttachment = async (idPostAttachment:number) =>{
     }
 };
 
-export const updatePost = async (idUser:number, title:string, category:number, idPost:number) =>{
+export const updatePost = async (idUser:number, title:string, category:number, idPost:number, short:string) =>{
     try {
         const response = await axios.post('http://localhost:8015/updatePost.php',
             { 
@@ -178,6 +179,7 @@ export const updatePost = async (idUser:number, title:string, category:number, i
                 id_post: idPost,
                 title: title,
                 category: category,
+                short: short
             }
         );
         if(response.data === 0){
@@ -454,6 +456,23 @@ export const getPostInfo = async (idPost:number) =>{
 export const getMinImage = async (idPost:number) =>{
     try {
         const response = await axios.post('http://localhost:8015/getMinImage.php',
+            { 
+                id_post: idPost,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
+export const getPostContent = async (idPost:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostContent.php',
             { 
                 id_post: idPost,
             }

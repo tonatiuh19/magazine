@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {getPostInfo, getMinImage} from '../../apiFunctions/apiFunctions';
-import {decode_utf8} from '../../resources/Decode/Decode';
+import {decode_utf8, removeAccents} from '../../resources/Decode/Decode';
 import Loading from '../../resources/Loading/Loading';
+import { useHistory, Link } from "react-router-dom";
 
 const PostCard = (props:any) => {
     const [title, setTitle] = useState('');
@@ -79,7 +80,7 @@ const PostCard = (props:any) => {
             </div>
             ) 
             : (<div className="card h-100 border-dark post-card">
-                <a href="" style={{textDecoration: 'none'}}>
+                <Link to={"/"+removeAccents(decode_utf8(typeName).toLowerCase())+"/"+props.idPost+"/"+decode_utf8(title)} style={{textDecoration: 'none'}}>
                 <img src={img} className="card-img-top p-2" alt="..." />
                 <div className={styleBGcard}>
                     <div className="row text-center">
@@ -93,7 +94,7 @@ const PostCard = (props:any) => {
                         </div>
                     </div>
                 </div>
-                </a>
+                </Link>
             </div>
             )}
         </div>  

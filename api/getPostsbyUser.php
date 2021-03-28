@@ -13,7 +13,7 @@ if($method == 'POST'){
 	if ($params['id_user']) {
 		$idUser = $params['id_user'];
 
-		$sql = "SELECT a.id_post, a.content, a.rating, a.approved, a.id_post_type, a.date_created, a.titulo, b.name FROM posts as a
+		$sql = "SELECT a.id_post, a.short_content, a.rating, a.approved, a.id_post_type, a.date_created, a.titulo, b.name FROM posts as a
 		INNER JOIN posts_type as b on a.id_post_type=b.id_post_type
 		WHERE a.active=1 AND a.id_user=".$idUser."
 		ORDER BY date_created desc";

@@ -12,7 +12,9 @@ import {decode_utf8} from '../../resources/Decode/Decode';
 
 const EditPost = (props:any) => {
     const [title, setTitle] = useState('');
+    const [short, setShort] = useState('');
     const [titleError, setTitleError] = useState(false);
+    const [shortError, setShortError] = useState(false);
     const [category, setCategory] = useState(0);
     const [loading, setLoading] = useState(true);
     const [postsAttachments, setPostsAttachments] = useState<any>([]);
@@ -49,6 +51,13 @@ const EditPost = (props:any) => {
             return false;
         }else{
             setTitleError(false);
+        }
+
+        if(short === ''){
+            setShortError(true);
+            return false;
+        }else{
+            setShortError(false);
         }
 
         for (let index = 1; index < postsAttachments.length; index++) {
@@ -108,7 +117,7 @@ const EditPost = (props:any) => {
             setError(false);
             setLoading(true);
             console.log(postsAttachments);
-            updatePost(getUser(), title, category, props.idPost).then((x) => {
+            updatePost(getUser(), title, category, props.idPost, short).then((x) => {
                 console.log("img", image.raw);
                 if(image.raw === ""){
                     updatePostImage(image.raw, x[0].id_post, props.idPost, 0).finally(() => setLoading(false));
@@ -180,7 +189,13 @@ const EditPost = (props:any) => {
                     {titleError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                 </div>
                 <hr></hr>
-
+                <div className="mb-3">
+                    <label className="form-label">Descripción corta del Articulo/Post/Noticia/Nota/Reseña/etc</label>
+                    <textarea className="form-control" maxLength={250} onChange={e => {setShort(e.target.value)}} rows={3}></textarea>
+                    <div id="emailHelp" className="form-text">Debe ser menor a 250 caracteres.</div>
+                    {shortError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                </div>
+                <hr></hr>
                 <div className="mb-3">
                     <label className="form-label">Miniatura: <span className="small text-muted">(Imagen que aparecera debajo o arriba del titulo.)</span></label>
                     <p></p>

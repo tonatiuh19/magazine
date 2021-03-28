@@ -15,13 +15,14 @@ if($method == 'POST'){
         $idUser = $params['id_user'];
         $title = $params['title'];
         $category = $params['category'];
+        $short = $params['short'];
         $todayVisit = date("Y-m-d H:i:s");
 
 
         $sql2 = "UPDATE posts SET active='4' WHERE id_post=".$idPost."";
 
         if ($conn->query($sql2) === TRUE) {
-            $sql = "INSERT INTO posts (id_user, rating, id_post_type, titulo, date_created) VALUES ('$idUser', '5', '$category', '$title', '$todayVisit')";
+            $sql = "INSERT INTO posts (id_user, rating, id_post_type, titulo, date_created, short_content) VALUES ('$idUser', '5', '$category', '$title', '$todayVisit', '$short')";
 
             if ($conn->query($sql) === TRUE) {
                 $last_id = $conn->insert_id;

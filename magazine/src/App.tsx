@@ -75,7 +75,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto fontBold fw-bolder">
               {postsTypes.map((x:any, index:number) =>{
-                  return (<Nav.Link key={index} href={"/"+removeAccents(x.name.toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
+                  return (<Nav.Link key={index} href={"/"+removeAccents(decode_utf8(x.name).toLowerCase())+"/"}>{decode_utf8(x.name)}</Nav.Link>);
               })}
             </Nav>
           </Navbar.Collapse>
@@ -89,14 +89,14 @@ function App() {
                 <Route path="/creatives" component={Posts} />
                 <Route path="/holaCreativo" component={NewProfile} />
                 <Route path="/profile" component={Profile} />
-                <Route path="/ciencia" component={Science} />
-                <Route path="/deportes" component={Sports} />
-                <Route path="/videojuegos" component={Videogames} />
-                <Route path="/musica" component={Music} />
-                <Route path="/cine" component={Movies} />
-                <Route path="/tecnologia" component={Technology} />
-                <Route path="/cultura" component={Culture} />
-                <Route path="/anime" component={Anime} />
+                <Route path="/ciencia/:id/:titulo" component={Science} />
+                <Route path="/deportes/:id/:titulo" component={Sports} />
+                <Route path="/videojuegos/:id/:titulo" component={Videogames} />
+                <Route path="/musica/:id/:titulo" component={Music} />
+                <Route path="/cine/:id/:titulo" component={Movies} />
+                <Route path="/tecnologia/:id/:titulo" component={Technology} />
+                <Route path="/cultura/:id/:titulo" component={Culture} />
+                <Route path="/anime/:id/:titulo" component={Anime} />
               </Switch>    
             </Router>
           </main>
