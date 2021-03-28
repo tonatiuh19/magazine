@@ -26,7 +26,7 @@ const AfterHeader = (props:any) => {
             </div>
             <div className="row text-center mb-5">
                 <div className="d-grid gap-2">
-                    <a href="" className="btn btn-dark">Ver mas</a>
+                    <a href="" className="btn btn-dark post-card">Ver mas</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,14 @@
+
+.contentHtml a:hover {
+  color: #000000;
+}
+
+.contentHtml a:hover {
+  border: 1px solid #000000;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.bigBorderHover:hover {
+  font-size: 20px;
+}

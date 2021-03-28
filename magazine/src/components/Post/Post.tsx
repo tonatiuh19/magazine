@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import Loading from '../../resources/Loading/Loading';
-import {getPostContent, getFullUserInfo} from '../../apiFunctions/apiFunctions';
+import {getPostContent, getFullUserInfo, getLastThreeByType} from '../../apiFunctions/apiFunctions';
 import { useHistory } from "react-router-dom";
 import {decode_utf8, firsLetterUpperCase} from '../../resources/Decode/Decode';
-import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub,FaArrowCircleDown } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import moment from 'moment';
 import 'moment/locale/es';
+import './styles/Post.css';
+import PostCard from './PostCard';
 
 const Post = (props:any) => {
     const [loading, setLoading] = useState(true);
@@ -15,6 +17,7 @@ const Post = (props:any) => {
     const [date, setDate] = useState('');
     const [author, setAuthor] = useState('');
     const [styleBtn, setStyleBtn] = useState<any>({});
+    const [recommendations, setRecommendations] = useState<any>({});
     const history = useHistory();
 
     const btnTypes = (type:number) =>{
@@ -69,6 +72,9 @@ const Post = (props:any) => {
                 setPost(x);
             }).finally(() => setLoading(false));
         });
+        getLastThreeByType(props.id).then((x) =>{
+            setRecommendations(x);
+        })
     }, [])
 
     return (
@@ -90,7 +96,7 @@ const Post = (props:any) => {
                     </div>
                     <h1>{props.titulo}</h1>
                     <h5 className="mt-2">{decode_utf8(post[0].short_content)}</h5>
-                    <small className="mt-2">{'por: '+author+' | '+firsLetterUpperCase(date)+' | '}{ 
+                    <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)+' | '}{ 
                         socialUserNetworks.map((x:any, index:any) =>{
                             if(x.id_creatives_social_networks_type === 1){
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaInstagram /></a>);
@@ -112,42 +118,63 @@ const Post = (props:any) => {
                 </div>
             </div>
             <div className="container">
-                <div className="row p-1 justify-content-center">
-                    <div className="col-sm-12">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-sm-8">
-                                    <div className="container">
-                                        <div className="row">
-                                            <div className="col-sm">
-                                            {post.slice(1).map((x:any, index:number)=>{
-                                                if(x.id_post_attachment_type === 1){
-                                                    return(<div key={index}>{x.content}</div>);
-                                                }else if(x.id_post_attachment_type === 2){
-                                                    return(<div key={index}>{x.content}</div>);
-                                                }else if(x.id_post_attachment_type === 3){
-                                                    return(<div key={index}>{x.content}</div>);
-                                                }else if(x.id_post_attachment_type === 4){
-                                                    return(<div key={index}>{x.content}</div>);
-                                                }else if(x.id_post_attachment_type === 5){
-                                                    return(<div key={index}>
-                                                        <img src={x.img} className="rounded mx-auto d-block" alt={decode_utf8(x.content)} />
-                                                        {decode_utf8(x.content)}
-                                                        </div>);
-                                                }else if(x.id_post_attachment_type === 6){
-
-                                                    return (<div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />);
-                                                   
-                                                }
-                                            })}
+                <div className="row p-1 justify-content-center mb-5">                         
+                    {post.slice(1).map((x:any, index:number)=>{
+                        if(x.id_post_attachment_type === 1){
+                                return(
+                                    <div className="col-sm-10 mb-4" key={index}>
+                                        <div>{x.content}</div>
+                                    </div>);
+                        }else if(x.id_post_attachment_type === 2){
+                                return(
+                                    <div className="col-sm-10 mb-4" key={index}>
+                                        <div>{x.content}</div>
+                                    </div>);
+                        }else if(x.id_post_attachment_type === 3){
+                                return(
+                                    <div className="col-sm-10 mb-4" key={index}>
+                                        <div>{x.content}</div>
+                                    </div>);
+                        }else if(x.id_post_attachment_type === 4){
+                                return(
+                                    <div className="col-sm-10 mb-4" key={index}>
+                                        <div>{x.content}</div>
+                                    </div>);
+                        }else if(x.id_post_attachment_type === 5){
+                                return(
+                                    <div className="col-sm-10 text-center mb-4" key={index}>
+                                        <div className="card col-sm-12 border-0">
+                                            <img src={x.img} className="mx-auto d-block img-fluid mb-1 card-img-top-post" alt={decode_utf8(x.content)} />
+                                            <div className="card-footer text-muted" >
+                                                {decode_utf8(x.content)}
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
+                                    </div>);
+                        }else if(x.id_post_attachment_type === 6){
+                                return (
+                                    <div className="col-sm-10 mb-4 contentHtml fs-5" key={index}>
+                                        <div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />
+                                    </div>);
+                            
+                        }
+                    })}                      
+                </div>
+                <div className="row text-center mb-5">
+                    <div >
+                        <FaArrowCircleDown className="bigBorderHover" />
                     </div>
+                </div>
+                <div className="row text-center mb-5">
+                    <div className="d-grid gap-2">
+                        <a href="" className="btn btn-dark post-card">Ver mas</a>
+                    </div>
+                </div>
+                <div className="row row-cols-1 row-cols-md-3 g-4 p-5 justify-content-center">
+                    {recommendations.map((x:any, index:number)=>{
+                        return (<div className="col" key={index}>
+                            <PostCard idPost={x.id_post} isHeader={0}></PostCard>
+                        </div>)
+                    })}
                 </div>
             </div></>
             )}
