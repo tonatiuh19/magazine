@@ -58,7 +58,7 @@ const Post = (props:any) => {
             if(x===0){
                 history.push("/");
             }
-            document.title = 'Agustirri | '+props.titulo;
+            document.title = props.titulo;
             getFullUserInfo(x[0].id_user).then((y)=>{
                 setSocialUserNetworks(y);
                 btnTypes(x[0].id_post_type);
@@ -117,7 +117,33 @@ const Post = (props:any) => {
                         <div className="container">
                             <div className="row">
                                 <div className="col-sm-8">
-                                    dkoekdeo
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-sm">
+                                            {post.slice(1).map((x:any, index:number)=>{
+                                                if(x.id_post_attachment_type === 1){
+                                                    return(<div key={index}>{x.content}</div>);
+                                                }else if(x.id_post_attachment_type === 2){
+                                                    return(<div key={index}>{x.content}</div>);
+                                                }else if(x.id_post_attachment_type === 3){
+                                                    return(<div key={index}>{x.content}</div>);
+                                                }else if(x.id_post_attachment_type === 4){
+                                                    return(<div key={index}>{x.content}</div>);
+                                                }else if(x.id_post_attachment_type === 5){
+                                                    return(<div key={index}>
+                                                        <img src={x.img} className="rounded mx-auto d-block" alt={decode_utf8(x.content)} />
+                                                        {decode_utf8(x.content)}
+                                                        </div>);
+                                                }else if(x.id_post_attachment_type === 6){
+
+                                                    return (<div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />);
+                                                   
+                                                }
+                                            })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
