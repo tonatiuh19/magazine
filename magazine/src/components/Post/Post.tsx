@@ -94,7 +94,7 @@ const Post = (props:any) => {
                     <div className="col-sm-3 m-2">
                         <button className="btn btn-outline-light btn-sm" style={styleBtn}>{decode_utf8(post[0].name)}</button>
                     </div>
-                    <h1>{props.titulo}</h1>
+                    <h1 className="fw-bolder">{props.titulo}</h1>
                     <h5 className="mt-2">{decode_utf8(post[0].short_content)}</h5>
                     <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)+' | '}{ 
                         socialUserNetworks.map((x:any, index:any) =>{

@@ -31,7 +31,7 @@ const PostsType = (props:any) => {
                 <div className="col-sm-12 bg-dark">
                     <div className="row p-5 text-white text-center">
                         <div className="col-sm-12">
-                            <h1>{decode_utf8(props.type)}</h1>
+                            <h1 className="fw-bolder">{decode_utf8(props.type)}</h1>
                         </div>
                         
                     </div>
