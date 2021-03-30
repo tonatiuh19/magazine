@@ -3,7 +3,7 @@ import Loading from '../../resources/Loading/Loading';
 import {getPostContent, getFullUserInfo, getLastThreeByType} from '../../apiFunctions/apiFunctions';
 import { useHistory } from "react-router-dom";
 import {decode_utf8, firsLetterUpperCase} from '../../resources/Decode/Decode';
-import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub,FaArrowCircleDown } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub,FaArrowCircleDown, FaTwitch } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -112,6 +112,8 @@ const Post = (props:any) => {
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaYoutube /></a>);
                             }else if(x.id_creatives_social_networks_type === 7){
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaGithub /></a>);
+                            }else if(x.id_creatives_social_networks_type === 8){
+                                return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaTwitch /></a>);
                             }
                         })
                     }</small>

@@ -503,3 +503,20 @@ export const getLastThreeByType = async (idPost:number) =>{
         return `😱 Request failed: ${e}`;
     }
 };
+
+export const getPostsByType = async (type:number) =>{
+    try {
+        const response = await axios.post('http://localhost:8015/getPostsByType.php',
+            { 
+                id_post_type: type,
+            }
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};

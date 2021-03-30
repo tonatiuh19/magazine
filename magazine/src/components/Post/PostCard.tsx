@@ -79,7 +79,7 @@ const PostCard = (props:any) => {
             ) 
             : (<div className="card h-100 border-dark post-card">
                 <Link to={"/"+removeAccents(decode_utf8(typeName.replace(/\s/g, '')).toLowerCase())+"/"+props.idPost+"/"+decode_utf8(title)} style={{textDecoration: 'none'}}>
-                <img src={img} className="card-img-top p-2" alt="..." />
+                <img src={img} className="card-img-top p-2" />
                 <div className={styleBGcard}>
                     <div className="row text-center">
                         <div className="col-sm-12 mb-2">
