@@ -13,7 +13,7 @@ if($method == 'POST'){
 	if ($params['id_post']) {
 		$idPost = $params['id_post'];
 
-		$sql = "SELECT a.id_post_attachment, a.id_post_attachment_type, a.content, a.order_post
+		$sql = "SELECT a.id_post_attachment, a.id_post_attachment_type, a.content, a.order_post, a.img
         FROM posts_attachment AS a
         WHERE date = (
             SELECT MAX(b.date)

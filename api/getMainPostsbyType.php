@@ -13,7 +13,7 @@ if($method == 'POST'){
 	if ($params['id_post_type']) {
 		$type = $params['id_post_type'];
 
-		$sql = "SELECT a.id_post, a.titulo, a.date_created, a.id_post_type, a.id_user from posts as a
+		$sql = "SELECT a.id_post, a.titulo, a.date_created, a.id_post_type, a.id_user, a.img from posts as a
         WHERE a.id_post_type=".$type."
         ORDER BY date_created DESC
         LIMIT 4";

@@ -10,7 +10,7 @@ if($method == 'POST'){
 	$params= json_decode($requestBody);
 	$params = (array) $params;
 
-    $sql = "SELECT t1.id_post, t1.id_user, t1.id_post_type, t1.titulo, t1.date_created, b.name FROM posts as t1
+    $sql = "SELECT t1.id_post, t1.id_user, t1.id_post_type, t1.titulo, t1.date_created, t1.img, b.name FROM posts as t1
     INNER JOIN posts_type as b on b.id_post_type=t1.id_post_type
         INNER JOIN 
         (

@@ -49,7 +49,7 @@ if($_FILES['avatar'])
                 
                 foreach(glob('storage/images/'.$idAttachment.'/*.{jpg,pdf,png,PNG}', GLOB_BRACE) as $file) {
                     //echo $file;
-                    $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/".$file;
+                    $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/api/".$file;
                     $sqlx = "UPDATE posts_attachment SET img='$actual_link' WHERE id_post_attachment=".$last_id."";
 
                     if ($conn->query($sqlx) === TRUE) {

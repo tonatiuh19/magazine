@@ -36,7 +36,7 @@ if($_POST['id_post'])
 
             foreach(glob('storage/min/images/'.$idPost.'/*.{jpg,pdf,png,PNG}', GLOB_BRACE) as $file) {
                 //echo $file;
-                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/".$file;
+                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/api/".$file;
                 $sqlx = "UPDATE posts SET img='$actual_link' WHERE id_post=".$idPost."";
     
                 if ($conn->query($sqlx) === TRUE) {
