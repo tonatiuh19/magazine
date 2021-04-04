@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import { getPostsByType } from '../../apiFunctions/apiFunctions';
+import { getPostsByType, insertVisitor } from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import moment from 'moment';
 import 'moment/locale/es';
 import {decode_utf8, removeAccents} from '../../resources/Decode/Decode';
 import { useHistory, Link } from "react-router-dom";
+import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
 
 const PostsType = (props:any) => {
     const [posts, setPosts] = useState<any>([]);
@@ -13,7 +14,7 @@ const PostsType = (props:any) => {
         getPostsByType(props.idType).then((x) =>{
             setPosts(x);
         }).finally(() => setLoading(false));
-            
+        insertVisitor("0."+String(props.idType), osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect);
     }, [])
 
     return (

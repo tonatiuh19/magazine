@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Loading from '../../resources/Loading/Loading';
-import {getPostContent, getFullUserInfo, getLastThreeByType} from '../../apiFunctions/apiFunctions';
+import {getPostContent, getFullUserInfo, getLastThreeByType, insertVisitor} from '../../apiFunctions/apiFunctions';
 import { useHistory } from "react-router-dom";
 import {decode_utf8, firsLetterUpperCase} from '../../resources/Decode/Decode';
 import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub,FaArrowCircleDown, FaTwitch } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import 'moment/locale/es';
 import './styles/Post.css';
 import PostCard from './PostCard';
+import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
 
 const Post = (props:any) => {
     const [loading, setLoading] = useState(true);
@@ -74,7 +75,8 @@ const Post = (props:any) => {
         });
         getLastThreeByType(props.id).then((x) =>{
             setRecommendations(x);
-        })
+        });
+        insertVisitor(String(props.id), osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect);
     }, [])
 
     return (
@@ -96,7 +98,7 @@ const Post = (props:any) => {
                     </div>
                     <h1 className="fw-bolder">{props.titulo}</h1>
                     <h5 className="mt-2">{decode_utf8(post[0].short_content)}</h5>
-                    <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)+' | '}{ 
+                    <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)+' | '}{/*
                         socialUserNetworks.map((x:any, index:any) =>{
                             if(x.id_creatives_social_networks_type === 1){
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaInstagram /></a>);
@@ -115,7 +117,7 @@ const Post = (props:any) => {
                             }else if(x.id_creatives_social_networks_type === 8){
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaTwitch /></a>);
                             }
-                        })
+                        })*/
                     }</small>
                 </div>
             </div>

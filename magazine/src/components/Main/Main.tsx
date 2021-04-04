@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {getPostsHeader, getMainPostsbyType} from '../../apiFunctions/apiFunctions';
+import {getPostsHeader, insertVisitor} from '../../apiFunctions/apiFunctions';
 import Loading from '../../resources/Loading/Loading';
 import {decode_utf8} from '../../resources/Decode/Decode';
 import PostCard from '../Post/PostCard';
 import AfterHeader from './AfterHeader';
+import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
 
 const Main = () => {
     const [postsHeader, setPostsHeader] = useState<any>([]);
@@ -14,6 +15,7 @@ const Main = () => {
         getPostsHeader().then((x) => {
             setPostsHeader(x);
         }).finally(() => setLoading(false));
+        insertVisitor('0', osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect);
     }, []);
 
     return (
