@@ -10,6 +10,7 @@ import 'moment/locale/es';
 import './styles/Post.css';
 import PostCard from './PostCard';
 import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
+import MetaTags from 'react-meta-tags';
 
 const Post = (props:any) => {
     const [loading, setLoading] = useState(true);
@@ -91,6 +92,13 @@ const Post = (props:any) => {
             </div>
             ) 
             : (<>
+            <MetaTags>
+                <meta property="og:url"                content={window.location.href} />
+                <meta property="og:type"               content="article" />
+                <meta property="og:title"              content={props.titulo} />
+                <meta property="og:description"        content={decode_utf8(post[0].short_content)} />
+                <meta property="og:image"              content={post[0].img} />
+            </MetaTags>
             <div className="col-sm-12 bg-dark">
                 <div className="row p-5 text-white">
                     <div className="col-sm-3 m-2">
@@ -98,7 +106,7 @@ const Post = (props:any) => {
                     </div>
                     <h1 className="fw-bolder">{props.titulo}</h1>
                     <h5 className="mt-2">{decode_utf8(post[0].short_content)}</h5>
-                    <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)+' | '}{/*
+                    <small className="mt-2">por: <span className="nameAuthorPost">{author}</span> | {firsLetterUpperCase(date)}{/*
                         socialUserNetworks.map((x:any, index:any) =>{
                             if(x.id_creatives_social_networks_type === 1){
                                 return (<a className="btn btn-link btn-sm p-1 me-1 text-white socialNetworkPost" href={x.value} target="_blank" key={index}><FaInstagram /></a>);

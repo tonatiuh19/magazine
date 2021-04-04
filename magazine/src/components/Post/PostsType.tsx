@@ -6,6 +6,7 @@ import 'moment/locale/es';
 import {decode_utf8, removeAccents} from '../../resources/Decode/Decode';
 import { useHistory, Link } from "react-router-dom";
 import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
+import MetaTags from 'react-meta-tags';
 
 const PostsType = (props:any) => {
     const [posts, setPosts] = useState<any>([]);
@@ -29,6 +30,12 @@ const PostsType = (props:any) => {
                 </div>
             ) 
             : (<>
+                <MetaTags>
+                    <meta property="og:url"                content={window.location.href} />
+                    <meta property="og:type"               content="article" />
+                    <meta property="og:title"              content={decode_utf8(props.type)} />
+                    <meta property="og:description"        content={"Todo lo relevante referente a "+decode_utf8(props.type)} />
+                </MetaTags>
                 <div className="col-sm-12 bg-dark">
                     <div className="row p-5 text-white text-center">
                         <div className="col-sm-12">

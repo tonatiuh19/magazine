@@ -13,7 +13,7 @@ if($method == 'POST'){
 	if ($params['id_post']) {
 		$idPost = $params['id_post'];
 
-		$sql = "SELECT a.id_post, a.titulo, a.date_created, a.id_post_type, a.id_user, b.name, a.short_content from posts as a
+		$sql = "SELECT a.id_post, a.titulo, a.date_created, a.id_post_type, a.id_user, b.name, a.short_content, a.img from posts as a
         INNER JOIN posts_type as b on b.id_post_type=a.id_post_type
         WHERE a.id_post=".$idPost."";
 

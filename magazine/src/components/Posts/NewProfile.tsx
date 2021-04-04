@@ -120,7 +120,7 @@ const NewProfile = () => {
     }, []);
 
     const insertCreativeSocials = (id_user:number) =>{
-        let promises = [];       
+        let promises:any = [];       
         for(let i=0; i<socials.length; i++){
             if("value" in socials[i]){
                 promises.push(insertCreactiveSocials(id_user, socials[i].id_creatives_social_networks_types, socials[i].value));

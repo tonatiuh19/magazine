@@ -133,7 +133,7 @@ const Posts = () => {
     }
 
     const insertPostsTypes = (id_post:number) =>{
-        let promises = [];       
+        let promises:any = [];       
         for(let i=1; i<postNewContent.length; i++){
             if(postNewContent[i].type !== 5){
                 /*promises.push({
@@ -149,7 +149,7 @@ const Posts = () => {
     };
 
     const insertPostsTypesWithImage = (id_post:number) =>{
-        let promises = [];       
+        let promises:any = [];       
         for(let i=1; i<postNewContent.length; i++){
             if(postNewContent[i].type === 5){
                 /*promises.push({

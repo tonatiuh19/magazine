@@ -74,7 +74,7 @@ const EditPost = (props:any) => {
 
     const updatePostsTypes = (id_post:number) =>{
         console.log("id",id_post);
-        let promises = [];       
+        let promises:any = [];       
         for(let i=0; i<postsAttachments.length; i++){
             if(postsAttachments[i].id_post_attachment_type !== 5){
                promises.push(updatePostTypes(id_post, postsAttachments[i].id_post_attachment_type, postsAttachments[i].content, postsAttachments[i].id,  postsAttachments[i].id_post_attachment));
@@ -85,7 +85,7 @@ const EditPost = (props:any) => {
 
     const updatePostsTypesWithImage = (id_post:number) =>{
         console.log("id",id_post);
-        let promises = [];       
+        let promises:any = [];       
         for(let i=0; i<postsAttachments.length; i++){
             if(postsAttachments[i].id_post_attachment_type === 5){
                 /*promises.push({
