@@ -1,16 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import {getMainPostsbyType} from '../../apiFunctions/apiFunctions';
 import PostCard from '../Post/PostCard';
+import { useHistory } from "react-router-dom";
 
 const AfterHeader = (props:any) => {
     const [posts, setposts] = useState<any>([]);
     const [loading, seLloading] = useState(true);
+    const history = useHistory();
 
     useEffect(() => {
         getMainPostsbyType(props.type).then((x) =>{
             setposts(x);
         });
     }, []);
+
+    const openCategory = (e:any) =>{
+        e.preventDefault();
+        history.push("/"+props.title);
+    }
 
     return (
         <div className="container">
@@ -26,7 +33,7 @@ const AfterHeader = (props:any) => {
             </div>
             <div className="row text-center mb-5">
                 <div className="d-grid gap-2">
-                    <a href="" className="btn btn-dark post-card">Ver mas</a>
+                    <a href="" onClick={(e) => openCategory(e)} className="btn btn-dark post-card">Ver mas</a>
                 </div>
             </div>
         </div>

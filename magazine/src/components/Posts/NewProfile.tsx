@@ -78,7 +78,7 @@ const NewProfile = () => {
             setValidation({...validation});
         }
 
-        if(socials.length >= 1){
+        /*if(socials.length >= 1){
             for(let key in socials){
                 if(socials[key].value === ''){
                     validation.socials = true;
@@ -89,7 +89,7 @@ const NewProfile = () => {
                     setValidation({...validation});
                 }
             }
-        }
+        }*/
 
         if(justification === ''){
             validation.justification = true;
@@ -211,7 +211,7 @@ const NewProfile = () => {
                                 </Row>
                             </div>
 
-                            <div className={validation.socials ? "container border border-danger rounded mb-2" : "container border border-secondary rounded mb-2"}>
+                            {/*<div className={validation.socials ? "container border border-danger rounded mb-2" : "container border border-secondary rounded mb-2"}>
                                 <div className="row text-left">
                                     <div className="col-sm-12">
                                         <p>
@@ -227,7 +227,7 @@ const NewProfile = () => {
                                     }
                                     return (<SocialNetworks key={index} type={x.id_creatives_social_networks_types} edit={0} value={x.title} onChange={handleSocialContent}></SocialNetworks>);
                                 })}                            
-                            </div>
+                            </div>*/}
                             
                             <div className="mb-3">
                                 {validation.justification ? (<textarea className="form-control border border-danger" onChange={(e) => setJustification(e.target.value)} placeholder="¿Porque te gustaría publicar en pocas palabras tus articulos/notas/noticias/... en Agustirri?" rows={3} />) 

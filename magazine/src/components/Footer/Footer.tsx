@@ -2,9 +2,11 @@ import React, {useState} from 'react'
 import {Modal} from 'react-bootstrap-v5'
 import Login from '../Login/Login';
 import { FaFacebookF, FaInstagram, FaTwitter, FaArrowAltCircleRight } from 'react-icons/fa';
+import { useHistory } from "react-router-dom";
 
 const Footer = () => {
     const [showLogin, setShowLogin] = useState(false);
+    const history = useHistory();
 
     const handleCloseLogin = () =>{
         setShowLogin(false);
@@ -12,6 +14,21 @@ const Footer = () => {
 
     function handleChange(newValue:boolean) {
         setShowLogin(newValue);
+    }
+
+    const openTerms = (e:any) =>{
+        e.preventDefault();
+        history.push("/terminosycondiciones/");
+    }
+
+    const openPrivacy = (e:any) =>{
+        e.preventDefault();
+        history.push("/avisodeprivacidad/");
+    }
+
+    const openAdds = (e:any) =>{
+        e.preventDefault();
+        history.push("/anunciateconnosotros/");
     }
 
     return (
@@ -28,6 +45,7 @@ const Footer = () => {
                     <Login onChange={handleChange}></Login>
                 </Modal.Body>
             </Modal>
+            
             <footer className="footer mt-auto py-3 bg-dark">
                 <div className="container">
                     <div className="row">
@@ -56,11 +74,11 @@ const Footer = () => {
                                         <button className="btn btn-link text-white footerLinks socialNetworkPost" style={{textDecoration: 'none'}} onClick={() => setShowLogin(true)}><small className="footerLinks"><FaArrowAltCircleRight /> Creativo</small></button>
                                     </div>
                                     <div className="col-sm-6">
-                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Anúnciate con nosotros</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="" onClick={(e) => openAdds(e)} style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Anúnciate con nosotros</small></a>
                                         <br></br>
-                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Términos y condiciones</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="" onClick={(e) => openTerms(e)} style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Términos y condiciones</small></a>
                                         <br></br>
-                                        <a className="btn btn-link text-white socialNetworkPost" href="#" style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Aviso de privacidad</small></a>
+                                        <a className="btn btn-link text-white socialNetworkPost" href="" onClick={(e) => openPrivacy(e)} style={{textDecoration: 'none'}}><small className="footerLinks"><FaArrowAltCircleRight /> Aviso de privacidad</small></a>
                                     </div>
                                 </div>
                             </div>

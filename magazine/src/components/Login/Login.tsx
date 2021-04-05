@@ -67,6 +67,11 @@ const Login = (props:any) => {
         session();
     }, []);
 
+    const newCreative = (e:any) =>{
+        e.preventDefault();
+        history.push("holaCreativo/");
+    }
+
     return (
         <div className="container">
             <div className="">
@@ -79,9 +84,12 @@ const Login = (props:any) => {
                             <input type="password" className="form-control" placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)} value={password} />
                         </div>
                         {error ? (<div className="alert alert-danger" role="alert">{errorMessage}</div>) : null}
-                        <button type="submit" className="btn btn-primary btn-block" onClick={() => signInValidation()}>Entrar</button>
+                        <div className="row">
+                            <div className="col-sm"><button type="submit" className="btn btn-primary btn-block" onClick={() => signInValidation()}>Entrar</button></div>
+                        </div>
+                        
                         <p className="forgot-password text-end">
-                            {/*<a href="#">Olvide mi contraseña</a>*/}
+                            <a href="" onClick={(e) => newCreative(e)}>Quiero empezar a publicar</a>
                         </p>
                         {loading ?
                         (<Loading></Loading>)

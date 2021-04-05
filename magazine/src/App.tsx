@@ -14,6 +14,9 @@ import NewProfile from './components/Posts/NewProfile';
 import LogoWhite from './resources/images/Logo/logo_white.png';
 import LogoBlack from './resources/images/Logo/logo_black.png';
 import Principal from './components/Principal/Principal';
+import TermsConditions from './components/TermsConditions/TermsConditions';
+import PrivacyConditions from './components/TermsConditions/PrivacyConditions';
+import AdsWithUs from './components/AdsWithUs/AdsWithUs';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -84,6 +87,9 @@ function App() {
                 <Route path="/creatives" component={Posts} />
                 <Route path="/holaCreativo" component={NewProfile} />
                 <Route path="/profile" component={Profile} />
+                <Route path="/terminosycondiciones" component={TermsConditions} />
+                <Route path="/avisodeprivacidad" component={PrivacyConditions} />
+                <Route path="/anunciateconnosotros" component={AdsWithUs} />
                 {postsTypes.map((x:any, index:number) =>{
                   return (<Route key={index} path={"/"+removeAccents(decode_utf8(x.name.replace(/\s/g, '')).toLowerCase())+"/:id?/:titulo?"} render={(props) => (
                     <Principal {...props} idType={x.id_post_type} type={x.name} />
