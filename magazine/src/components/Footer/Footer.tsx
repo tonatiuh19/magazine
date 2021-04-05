@@ -56,9 +56,9 @@ const Footer = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaFacebookF /></a>
-                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaInstagram /></a>
-                                        <a href="#" className="btn btn-outline-light btn-sm m-1"><FaTwitter /></a>
+                                        <a href="https://www.facebook.com/agustirrioficial" target="_blank" className="btn btn-outline-light btn-sm m-1"><FaFacebookF /></a>
+                                        <a href="https://www.instagram.com/agustirrioficial" target="_blank" className="btn btn-outline-light btn-sm m-1"><FaInstagram /></a>
+                                        {/*<a href="#" className="btn btn-outline-light btn-sm m-1"><FaTwitter /></a>*/}
                                     </div>
                                 </div>
                             </div>
