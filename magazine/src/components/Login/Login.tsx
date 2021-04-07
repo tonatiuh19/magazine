@@ -26,7 +26,7 @@ const Login = (props:any) => {
                         setErrorMessage(x);
                     }else if (Array.isArray(x)){
                         localStorage.setItem("08191993", x[0].id_user)
-                        history.push("creatives/");
+                        history.push("/creatives/");
                         handleChange(false);
                     }else{
                         setError(true);
@@ -53,7 +53,7 @@ const Login = (props:any) => {
     const session = () => {
         const loggedInUser = localStorage.getItem("08191993");
         if (loggedInUser) {
-            history.push("creatives/");
+            history.push("/creatives/");
             handleChange(false);
         }
     };
