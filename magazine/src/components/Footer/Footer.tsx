@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {Modal} from 'react-bootstrap-v5'
 import Login from '../Login/Login';
 import { FaFacebookF, FaInstagram, FaTwitter, FaArrowAltCircleRight } from 'react-icons/fa';
+import { HiOutlineMail } from 'react-icons/hi';
 import { useHistory } from "react-router-dom";
 
 const Footer = () => {
@@ -58,6 +59,7 @@ const Footer = () => {
                                     <div className="col-sm-12">
                                         <a href="https://www.facebook.com/agustirrioficial" target="_blank" className="btn btn-outline-light btn-sm m-1"><FaFacebookF /></a>
                                         <a href="https://www.instagram.com/agustirrioficial" target="_blank" className="btn btn-outline-light btn-sm m-1"><FaInstagram /></a>
+                                        <a href="mailto:dihola@agustirri.com?Subject=Hola%20equipo%20Agustirri" className="btn btn-outline-light btn-sm m-1"><HiOutlineMail /></a>
                                         {/*<a href="#" className="btn btn-outline-light btn-sm m-1"><FaTwitter /></a>*/}
                                     </div>
                                 </div>
