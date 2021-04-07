@@ -1,9 +1,9 @@
 import axios from "axios";
 
 //PROD
-//const server = 'https://agustirri.com/api/';
+const server = 'https://agustirri.com/api/';
 //TEST
-const server = 'http://localhost:8015/api/';
+//const server = 'http://localhost:8015/api/';
 
 
 
