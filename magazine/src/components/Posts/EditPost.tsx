@@ -28,6 +28,9 @@ const EditPost = (props:any) => {
     const [errorImageTextPost, setErrorImageTextPost] = useState('Necesitas incluir una imagen');
     const [image, setImagePost] = useState({ raw: "" });
 
+    const [startDate, setStartDate] = useState('');
+    const [datePublishError, setDatePublishError] = useState(false);
+
     useEffect(() => {
         setTitle(props.title);
         setCategory(props.type);
@@ -191,9 +194,15 @@ const EditPost = (props:any) => {
                 <hr></hr>
                 <div className="mb-3">
                     <label className="form-label">Descripción corta del Articulo/Post/Noticia/Nota/Reseña/etc</label>
-                    <textarea className="form-control" maxLength={250} onChange={e => {setShort(e.target.value)}} rows={3}></textarea>
+                    <textarea className="form-control" maxLength={250} defaultValue={decode_utf8(props.short)} onChange={e => {setShort(e.target.value)}} rows={3}></textarea>
                     <div id="emailHelp" className="form-text">Debe ser menor a 250 caracteres.</div>
                     {shortError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                </div>
+                <hr></hr>
+                <div className="mb-3">
+                    <label className="form-label">¿En que fecha y horario sera publicado?</label>
+                    <input type="datetime-local" value={props.dateToPublish} onChange={e => {setStartDate(e.target.value)}} className="form-control"  />
+                    {datePublishError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                 </div>
                 <hr></hr>
                 <div className="mb-3">

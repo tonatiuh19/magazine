@@ -1,9 +1,9 @@
 import axios from "axios";
 
 //PROD
-const server = 'https://agustirri.com/api/';
+//const server = 'https://agustirri.com/api/';
 //TEST
-//const server = 'http://localhost:8015/api/';
+const server = 'http://localhost:8015/api/';
 
 
 
@@ -87,7 +87,7 @@ export const getSocialNetworks = async () =>{
     }
 };
 
-export const insertPost = async (idUser:number, title:string, category:number, short:string) =>{
+export const insertPost = async (idUser:number, title:string, category:number, short:string, dateToPublish:string) =>{
     try {
         const response = await axios.post(server+'insertPost.php',
             { 
@@ -95,6 +95,7 @@ export const insertPost = async (idUser:number, title:string, category:number, s
                 title: title,
                 category: category,
                 short: short,
+                dateToPublish: dateToPublish
             }
         );
         if(response.data === 0){

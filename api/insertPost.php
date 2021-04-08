@@ -15,9 +15,10 @@ if($method == 'POST'){
         $title = $params['title'];
         $category = $params['category'];
         $short = $params['short'];
+        $dateToPublish = $params['dateToPublish'];
         $todayVisit = date("Y-m-d H:i:s");
 
-        $sql = "INSERT INTO posts (id_user, rating, id_post_type, titulo, date_created, short_content) VALUES ('$idUser', '5', '$category', '$title', '$todayVisit', '$short')";
+        $sql = "INSERT INTO posts (id_user, rating, id_post_type, titulo, date_created, short_content, date_toPublish) VALUES ('$idUser', '5', '$category', '$title', '$todayVisit', '$short', '$dateToPublish')";
 
         if ($conn->query($sql) === TRUE) {
             $sql2 = "SELECT id_post FROM posts WHERE id_user='".$idUser."' AND id_post_type=".$category." AND date_created='".$todayVisit."'";

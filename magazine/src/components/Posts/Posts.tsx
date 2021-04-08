@@ -12,6 +12,7 @@ import {Form, Modal, Button} from 'react-bootstrap';
 import { useHistory, Link } from "react-router-dom";
 import {decode_utf8} from '../../resources/Decode/Decode';
 import Moment from 'moment';
+import DatePicker from 'react-datepicker';
 
 import ImagePost from './ImagePost';
 import EditorPost from './EditorPost';
@@ -53,8 +54,13 @@ const Posts = () => {
     const [idPostEdit, setIdPostEdit] = useState(0);
     const [titlePostEdit, setTitlePostEdit] = useState('');
     const [typePostEdit, setTypePostEdit] = useState(0);
+    const [shortEdit, setShortEdit] = useState('');
+    const [dateToPublishEdit, setDateToPublishEdit] = useState('');
 
     const [showInactive, setShowInactive] = useState(false);
+
+    const [startDate, setStartDate] = useState('');
+    const [datePublishError, setDatePublishError] = useState(false);
 
     const signOff = () =>{
         localStorage.clear();
@@ -108,6 +114,13 @@ const Posts = () => {
             return false;
         }else{
             setShortError(false);
+        }
+
+        if(startDate === ''){
+            setDatePublishError(true);
+            return false;
+        }else{
+            setDatePublishError(false);
         }
 
         if(image.raw === ""){
@@ -174,7 +187,7 @@ const Posts = () => {
         }else{
             setError(false);
             setLoading(true);
-            insertPost(getUser(), title, category, short).then((x) => {
+            insertPost(getUser(), title, category, short, startDate).then((x) => {
                 insertPostImage(image.raw, x[0].id_post).finally(() => setLoading(false));
                 Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
                     console.log(results);
@@ -208,12 +221,14 @@ const Posts = () => {
         setProductImage('');
     }
 
-    const editPost = (id:number, title:string, type:number) =>{
+    const editPost = (id:number, title:string, type:number, short:string, dateToPublish:string) =>{
         setNewPostStatus(true);
         setEditPostStatus(true);
         setIdPostEdit(id);
         setTitlePostEdit(title);
         setTypePostEdit(type);
+        setShortEdit(short);
+        setDateToPublishEdit(dateToPublish);
     }
 
     const cancelEditPost = (from:number) =>{
@@ -417,7 +432,7 @@ const Posts = () => {
                                                         <div className="float-end"><button className="btn btn-outline-danger" onClick={() => cancelEditPost(0)}><FontAwesomeIcon icon={faTimesCircle} /> Cancelar</button></div>
                                                     </div>
                                                     <div className="col-sm-8">
-                                                        <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} onChange={(x:number) => cancelEditPost(x)} postTypes={postsTypes}></EditPost>
+                                                        <EditPost idPost={idPostEdit} title={titlePostEdit} type={typePostEdit} short={shortEdit} dateToPublish={dateToPublishEdit} onChange={(x:number) => cancelEditPost(x)} postTypes={postsTypes}></EditPost>
                                                     </div>
                                                 </div>
                                             ) 
@@ -441,6 +456,12 @@ const Posts = () => {
                                                             <textarea className="form-control" maxLength={250} onChange={e => {setShort(e.target.value)}} rows={3}></textarea>
                                                             <div id="emailHelp" className="form-text">Debe ser menor a 250 caracteres.</div>
                                                             {shortError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
+                                                        </div>
+                                                        <hr></hr>
+                                                        <div className="mb-3">
+                                                            <label className="form-label">¿En que fecha y horario sera publicado?</label>
+                                                            <input type="datetime-local" min={new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()} onChange={e => {setStartDate(e.target.value)}} className="form-control"  />
+                                                            {datePublishError ? (<div className="alert alert-danger p-1" role="alert">Esta campo no puede estar vacio</div>) : null}
                                                         </div>
                                                         <hr></hr>
                                                         <div className="mb-3">
@@ -674,7 +695,7 @@ const Posts = () => {
                                                                             <td>{decode_utf8(x.name)}</td>
                                                                             <td>{Moment(x.date_created).format('lll')}</td>
                                                                             <td>{0}</td>
-                                                                            <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type)}><BsPencil /></button></td>
+                                                                            <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type, x.short_content, x.date_toPublish)}><BsPencil /></button></td>
                                                                             <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
                                                                           </tr>);
                                                                     })
