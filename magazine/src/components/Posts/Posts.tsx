@@ -689,15 +689,28 @@ const Posts = () => {
                                                             <tbody>
                                                                 {
                                                                     posts.map((x:any, index) =>{
-                                                                        return (<tr key={index}>
-                                                                            <th scope="row">{x.id_post}</th>
-                                                                            <td>{decode_utf8(x.titulo)}</td>
-                                                                            <td>{decode_utf8(x.name)}</td>
-                                                                            <td>{Moment(x.date_created).format('lll')}</td>
-                                                                            <td>{0}</td>
-                                                                            <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type, x.short_content, x.date_toPublish)}><BsPencil /></button></td>
-                                                                            <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
-                                                                          </tr>);
+                                                                        if(x.active == 2){
+                                                                            return (<tr key={index} className="table-warning">
+                                                                                <th scope="row">{x.id_post}</th>
+                                                                                <td>{decode_utf8(x.titulo)}</td>
+                                                                                <td>{decode_utf8(x.name)}</td>
+                                                                                <td>{Moment(x.date_created).format('lll')}</td>
+                                                                                <td>{0}</td>
+                                                                                <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type, x.short_content, x.date_toPublish)}><BsPencil /></button></td>
+                                                                                <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
+                                                                              </tr>);
+                                                                        }else{
+                                                                            return (<tr key={index}>
+                                                                                <th scope="row">{x.id_post}</th>
+                                                                                <td>{decode_utf8(x.titulo)}</td>
+                                                                                <td>{decode_utf8(x.name)}</td>
+                                                                                <td>{Moment(x.date_created).format('lll')}</td>
+                                                                                <td>{0}</td>
+                                                                                <td><button className="btn btn-primary btn-sm" onClick={() => editPost(x.id_post, x.titulo, x.id_post_type, x.short_content, x.date_toPublish)}><BsPencil /></button></td>
+                                                                                <td><button className="btn btn-danger btn-sm" onClick={() => {setDeletePost(x.id_post); setShowDelete(true);}}><BsTrash /></button></td>
+                                                                              </tr>);
+                                                                        }
+                                                                        
                                                                     })
                                                                 }
                                                             </tbody>
