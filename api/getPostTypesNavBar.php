@@ -13,7 +13,7 @@ if($method == 'POST'){
     $sql = "SELECT a.id_post_type, COUNT(a.id_post_type) AS total, b.name
     FROM posts as a
     INNER JOIN posts_type as b on b.id_post_type=a.id_post_type
-    WHERE a.active <> 0
+    WHERE a.active <> 0 AND a.active <> 2
     GROUP BY a.id_post_type
     ORDER BY total DESC, a.id_post_type";
     
