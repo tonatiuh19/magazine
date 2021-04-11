@@ -31,7 +31,7 @@ const ImagePost = (props:any) => {
     const validateImage = (file:any) =>{
         let fileNameArr =  file.name.split(".");
         let filename = fileNameArr[fileNameArr.length-1];
-        if (!(filename === "png" || filename === "jpg" || filename === "JPG" || filename === "PNG")) {
+        if (!(filename === "png" || filename === "jpg" || filename === "JPG" || filename === "PNG" || filename === "jpeg" || filename === "JPEG")) {
             setErrorImageText("Solo se soportan archivos png o jpg");
             return false;
         }
@@ -48,7 +48,7 @@ const ImagePost = (props:any) => {
             setErrorImage(false);
             setLoading(true);
             getImageAttachment(props.idPostAttach).then((x) =>{
-                console.log(x);
+                //console.log(x);
                 setProductImage(x);
                 setURL(x);
             }).finally(() => setLoading(false));

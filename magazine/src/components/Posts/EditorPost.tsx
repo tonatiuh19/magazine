@@ -31,7 +31,7 @@ const EditorPost = (props:any) => {
         <div >
             <div className="col-sm-12 mt-2" >
                 <Editor
-                    apiKey="fsbuizdicw83hzcfi1qnge8cdxr039npsalv7ek1eh01hddx"
+                    apiKey="3ka4ppcuraelrtsljbrk7x54z40wmtqnz4muz4rfa555n2ur"
                     initialValue={props.content}
                     init={{
                         height: 300,

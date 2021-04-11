@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Loading from '../../resources/Loading/Loading';
 import {getPostContent, getFullUserInfo, getLastThreeByType, insertVisitor} from '../../apiFunctions/apiFunctions';
 import { useHistory } from "react-router-dom";
-import {decode_utf8, firsLetterUpperCase} from '../../resources/Decode/Decode';
+import {decode_utf8, firsLetterUpperCase, removeAccents} from '../../resources/Decode/Decode';
 import { FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaGithub,FaArrowCircleDown, FaTwitch } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import 'moment/locale/es';
 import './styles/Post.css';
 import PostCard from './PostCard';
 import { osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect } from "react-device-detect";
-import MetaTags from 'react-meta-tags';
+import {Helmet} from "react-helmet";
 
 const Post = (props:any) => {
     const [loading, setLoading] = useState(true);
@@ -20,6 +20,8 @@ const Post = (props:any) => {
     const [author, setAuthor] = useState('');
     const [styleBtn, setStyleBtn] = useState<any>({});
     const [recommendations, setRecommendations] = useState<any>({});
+    const [noRecommendations, setNoRecommendations] = useState(false);
+
     const history = useHistory();
 
     const btnTypes = (type:number) =>{
@@ -33,7 +35,7 @@ const Post = (props:any) => {
             });
         }else if(type === 3){
             setStyleBtn({
-                color: '#123456'
+                color: '#7db0e3'
             });
         }else if(type === 4){
             setStyleBtn({
@@ -63,6 +65,7 @@ const Post = (props:any) => {
             if(x===0){
                 history.push("/");
             }
+            
             document.title = props.titulo;
             getFullUserInfo(x[0].id_user).then((y)=>{
                 setSocialUserNetworks(y);
@@ -75,10 +78,19 @@ const Post = (props:any) => {
             }).finally(() => setLoading(false));
         });
         getLastThreeByType(props.id).then((x) =>{
-            setRecommendations(x);
+            //console.log("ss",x);
+            if(x != 0){
+                setNoRecommendations(true);
+                setRecommendations(x);
+            }
         });
         insertVisitor(String(props.id), osName, browserVersion, browserName, mobileVendor, mobileModel, engineName, deviceType, deviceDetect);
-    }, [])
+    }, []);
+
+    const sendToCategory = (e:any) =>{
+        e.preventDefault();
+        history.push("/"+removeAccents(decode_utf8(post[0].name.replace(/\s/g, '')).toLowerCase())+"/");
+    }
 
     return (
         <div>
@@ -92,17 +104,18 @@ const Post = (props:any) => {
             </div>
             ) 
             : (<>
-            <MetaTags>
+            <Helmet>
                 <meta property="og:url"                content={window.location.href} />
                 <meta property="og:type"               content="article" />
                 <meta property="og:title"              content={props.titulo} />
                 <meta property="og:description"        content={decode_utf8(post[0].short_content)} />
                 <meta property="og:image"              content={post[0].img} />
-            </MetaTags>
+                <meta property="fb:app_id"              content="455096692464855" />
+            </Helmet>
             <div className="col-sm-12 bg-dark">
                 <div className="row p-5 text-white">
                     <div className="col-sm-3 m-2">
-                        <button className="btn btn-outline-light btn-sm" style={styleBtn}>{decode_utf8(post[0].name)}</button>
+                        <button className="btn btn-outline-light btn-sm" style={styleBtn} onClick={(e) => sendToCategory(e)}>{decode_utf8(post[0].name)}</button>
                     </div>
                     <h1 className="fw-bolder">{props.titulo}</h1>
                     <h5 className="mt-2">{decode_utf8(post[0].short_content)}</h5>
@@ -133,24 +146,24 @@ const Post = (props:any) => {
                 <div className="row p-1 justify-content-center mb-5">                         
                     {post.slice(1).map((x:any, index:number)=>{
                         if(x.id_post_attachment_type === 1){
-                                return(
-                                    <div className="col-sm-10 mb-4" key={index}>
-                                        <div>{x.content}</div>
+                                return (
+                                    <div className="col-sm-10 mb-4 text-center contentHtml fs-5" key={index}>
+                                        <div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />
                                     </div>);
                         }else if(x.id_post_attachment_type === 2){
-                                return(
-                                    <div className="col-sm-10 mb-4" key={index}>
-                                        <div>{x.content}</div>
+                                return (
+                                    <div className="col-sm-10 mb-4 text-center contentHtml fs-5" key={index}>
+                                        <div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />
                                     </div>);
                         }else if(x.id_post_attachment_type === 3){
-                                return(
-                                    <div className="col-sm-10 mb-4" key={index}>
-                                        <div>{x.content}</div>
+                                return (
+                                    <div className="col-sm-10 mb-4 text-center contentHtml fs-5" key={index}>
+                                        <div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />
                                     </div>);
                         }else if(x.id_post_attachment_type === 4){
-                                return(
-                                    <div className="col-sm-10 mb-4" key={index}>
-                                        <div>{x.content}</div>
+                                return (
+                                    <div className="col-sm-10 mb-4 text-center contentHtml fs-5" key={index}>
+                                        <div key={index} dangerouslySetInnerHTML={{ __html: x.content }} />
                                     </div>);
                         }else if(x.id_post_attachment_type === 5){
                                 return(
@@ -171,23 +184,30 @@ const Post = (props:any) => {
                         }
                     })}                      
                 </div>
-                <div className="row text-center mb-5">
-                    <div >
-                        <FaArrowCircleDown className="bigBorderHover" />
-                    </div>
-                </div>
-                <div className="row text-center mb-5">
-                    <div className="d-grid gap-2">
-                        <a href="" className="btn btn-dark post-card">Ver mas</a>
-                    </div>
-                </div>
-                <div className="row row-cols-1 row-cols-md-3 g-4 p-5 justify-content-center">
-                    {recommendations.map((x:any, index:number)=>{
-                        return (<div className="col" key={index}>
-                            <PostCard idPost={x.id_post} isHeader={0}></PostCard>
-                        </div>)
-                    })}
-                </div>
+                
+                
+                {noRecommendations ? (
+                    <>
+                        <div className="row text-center mb-5">
+                            <div >
+                                <FaArrowCircleDown className="bigBorderHover" />
+                            </div>
+                        </div>
+                        <div className="row text-center mb-5">
+                            <div className="d-grid gap-2">
+                                <a href="" className="btn btn-dark post-card">Ver mas</a>
+                            </div>
+                        </div>
+                        <div className="row row-cols-1 row-cols-md-3 g-4 p-5 justify-content-center">
+                            {recommendations.map((x:any, index:number)=>{
+                                return (<div className="col" key={index}>
+                                    <PostCard idPost={x.id_post} isHeader={0}></PostCard>
+                                </div>)
+                            })}
+                        </div>
+                    </>
+                ) : null}
+                
             </div></>
             )}
         </div>

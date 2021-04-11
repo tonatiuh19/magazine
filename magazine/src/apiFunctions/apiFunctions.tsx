@@ -240,11 +240,11 @@ export const updatePostTypesWithImage = async (imageRaw:any, idPost:number, type
       }
     }
     ).then(function(res){
-        console.log('SUCCESS!!', res);
+        //console.log('SUCCESS!!', res);
         return 1;
     })
     .catch(function(){
-        console.log('FAILURE!!');
+        //console.log('FAILURE!!');
     });
 };
 
@@ -264,11 +264,11 @@ export const updatePostImage = async (imageRaw:any, idPost:number, oldIdPost:num
       }
     }
     ).then(function(res){
-        console.log('SUCCESS!!', res);
+        //console.log('SUCCESS!!', res);
         return 1;
     })
     .catch(function(){
-        console.log('FAILURE!!');
+        //console.log('FAILURE!!');
     });
 };
 
@@ -289,11 +289,11 @@ export const insertPostTypesWithImage = async (imageRaw:any, idPost:number, type
       }
     }
     ).then(function(res){
-        console.log('SUCCESS!!', res);
+        //console.log('SUCCESS!!', res);
         return 1;
     })
     .catch(function(){
-        console.log('FAILURE!!');
+        //console.log('FAILURE!!');
     });
 };
 
@@ -311,11 +311,11 @@ export const insertPostImage = async (imageRaw:any, idPost:number) =>{
       }
     }
     ).then(function(res){
-        console.log('SUCCESS!!', res);
+        //console.log('SUCCESS!!', res);
         return 1;
     })
     .catch(function(){
-        console.log('FAILURE!!');
+        //console.log('FAILURE!!');
     });
 };
 

@@ -30,11 +30,11 @@ if($_POST['id_post'])
         $filename = basename($_FILES['avatar']['name']);
         $newname = $folder_path . $filename;
         $fileOk = 1;
-        $types = array('image/jpeg', 'image/jpg', 'image/png');  
+        $types = array('image/jpeg', 'image/jpg', 'image/png', 'image/jpeg');  
 
         if(move_uploaded_file($_FILES['avatar']['tmp_name'], $newname)){
 
-            foreach(glob('storage/min/images/'.$idPost.'/*.{jpg,pdf,png,PNG}', GLOB_BRACE) as $file) {
+            foreach(glob('storage/min/images/'.$idPost.'/*.{jpg,pdf,png,PNG,jpeg,jpeg}', GLOB_BRACE) as $file) {
                 //echo $file;
                 $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"."/api/".$file;
                 $sqlx = "UPDATE posts SET img='$actual_link' WHERE id_post=".$idPost."";

@@ -40,7 +40,7 @@ const EditPost = (props:any) => {
             setErrorImagePost(false);
             setLoading(true);
             getImageAttachment(props.idPostAttach).then((x) =>{
-                console.log(x);
+                //console.log(x);
                 setProductImage(x);
                 setURL(x);
             }).finally(() => setLoading(false));
@@ -76,7 +76,7 @@ const EditPost = (props:any) => {
     }
 
     const updatePostsTypes = (id_post:number) =>{
-        console.log("id",id_post);
+        //console.log("id",id_post);
         let promises:any = [];       
         for(let i=0; i<postsAttachments.length; i++){
             if(postsAttachments[i].id_post_attachment_type !== 5){
@@ -87,7 +87,7 @@ const EditPost = (props:any) => {
     };
 
     const updatePostsTypesWithImage = (id_post:number) =>{
-        console.log("id",id_post);
+        //console.log("id",id_post);
         let promises:any = [];       
         for(let i=0; i<postsAttachments.length; i++){
             if(postsAttachments[i].id_post_attachment_type === 5){
@@ -99,10 +99,10 @@ const EditPost = (props:any) => {
                     id: postNewContent[i].id
                 });*/
                 if("raw" in postsAttachments[i]){
-                    console.log("nuevo", postsAttachments[i].raw)
+                    //console.log("nuevo", postsAttachments[i].raw)
                     promises.push(updatePostTypesWithImage(postsAttachments[i].raw, id_post, postsAttachments[i].id_post_attachment_type, postsAttachments[i].content, postsAttachments[i].id, 1, postsAttachments[i].id_post_attachment));
                 }else{
-                    console.log("cambio", postsAttachments[i].raw)
+                    //console.log("cambio", postsAttachments[i].raw)
                     promises.push(updatePostTypesWithImage(postsAttachments[i].raw, id_post, postsAttachments[i].id_post_attachment_type, postsAttachments[i].content, postsAttachments[i].id, 0, postsAttachments[i].id_post_attachment));
                 }
                 
@@ -119,9 +119,9 @@ const EditPost = (props:any) => {
         }else{
             setError(false);
             setLoading(true);
-            console.log(postsAttachments);
+            //console.log(postsAttachments);
             updatePost(getUser(), title, category, props.idPost, short).then((x) => {
-                console.log("img", image.raw);
+                //console.log("img", image.raw);
                 if(image.raw === ""){
                     updatePostImage(image.raw, x[0].id_post, props.idPost, 0).finally(() => setLoading(false));
                 }else{
@@ -129,12 +129,12 @@ const EditPost = (props:any) => {
                 }
                 setLoading(true);
                 Promise.all(updatePostsTypes(x[0].id_post)).then(function (results) {
-                    console.log(results);
+                    //console.log(results);
                 }).finally(() => setLoading(false));
                 setLoading(true);
                 //console.log(insertPostsTypesWithImage(x[0].id_post));
                 Promise.all(updatePostsTypesWithImage(x[0].id_post)).then(function (resultss) {
-                    console.log(resultss);
+                    //console.log(resultss);
                 }).finally(() => setLoading(false));
             }).then(() =>{
                 props.onChange(1);

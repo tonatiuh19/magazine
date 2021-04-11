@@ -30,7 +30,7 @@ const InstagramPost = (props:any) => {
         <div>
             <div className="col-sm-12 mt-2" >
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Ingresa el link del post de Instagram</Form.Label>
+                    <Form.Label>Ingresa el embed del post de Instagram</Form.Label>
                     <Form.Control type="text" defaultValue={props.content} onChange={(e) => handleEditorChange(e.target.value)} />
                 </Form.Group>
             </div>

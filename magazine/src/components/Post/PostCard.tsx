@@ -16,6 +16,7 @@ const PostCard = (props:any) => {
 
     useEffect(() =>{
         getPostInfo(props.idPost).then((x) =>{
+            //console.log(x);
             btnTypes(x[0].id_post_type);
             setImg(x[0].img);
             setTitle(x[0].titulo);
@@ -41,7 +42,7 @@ const PostCard = (props:any) => {
             });
         }else if(type === 3){
             setStyleBtn({
-                color: '#123456'
+                color: '#7db0e3'
             });
         }else if(type === 4){
             setStyleBtn({
@@ -78,7 +79,7 @@ const PostCard = (props:any) => {
             </div>
             ) 
             : (<div className="card h-100 border-dark post-card">
-                <Link to={"/"+removeAccents(decode_utf8(typeName.replace(/\s/g, '')).toLowerCase())+"/"+props.idPost+"/"+decode_utf8(title)} style={{textDecoration: 'none'}}>
+                <Link to={"/"+removeAccents(decode_utf8(typeName.replace(/\s/g, '')).toLowerCase())+"/"+props.idPost+"/"+decode_utf8(title).replace(/\s+/g, '-')} style={{textDecoration: 'none'}}>
                 <img src={img} className="card-img-top p-2" />
                 <div className={styleBGcard}>
                     <div className="row text-center">

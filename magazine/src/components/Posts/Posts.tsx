@@ -12,7 +12,7 @@ import {Form, Modal, Button} from 'react-bootstrap';
 import { useHistory, Link } from "react-router-dom";
 import {decode_utf8} from '../../resources/Decode/Decode';
 import Moment from 'moment';
-import DatePicker from 'react-datepicker';
+import ReactPaginate from 'react-paginate';
 
 import ImagePost from './ImagePost';
 import EditorPost from './EditorPost';
@@ -62,6 +62,10 @@ const Posts = () => {
     const [startDate, setStartDate] = useState('');
     const [datePublishError, setDatePublishError] = useState(false);
 
+    const [offset, setOffset] = useState(0);
+    const [perPage] = useState(10);
+    const [pageCount, setPageCount] = useState(0);
+
     const signOff = () =>{
         localStorage.clear();
         history.push("/");
@@ -73,7 +77,7 @@ const Posts = () => {
 
     const addTotEditor = (e:any, type:number) =>{
         e.preventDefault();
-        console.log(postNewContent);
+        //console.log(postNewContent);
         setPostNewContent([...postNewContent, {
             id: 0,
             type: type,
@@ -180,7 +184,7 @@ const Posts = () => {
 
     const publish = (e:any) => {
         e.preventDefault();
-        console.log(validatePost());
+        //console.log(validatePost());
         if(!validatePost()){
             setError(true);
             setErrorText('Necesitas completar todos los campos');
@@ -190,11 +194,11 @@ const Posts = () => {
             insertPost(getUser(), title, category, short, startDate).then((x) => {
                 insertPostImage(image.raw, x[0].id_post).finally(() => setLoading(false));
                 Promise.all(insertPostsTypes(x[0].id_post)).then(function (results) {
-                    console.log(results);
+                    //console.log(results);
                 });
                 //console.log(insertPostsTypesWithImage(x[0].id_post));
                 Promise.all(insertPostsTypesWithImage(x[0].id_post)).then(function (resultss) {
-                    console.log(resultss);
+                    //console.log(resultss);
                 });
             }).then(() =>{
                 setErrorText('');
@@ -260,7 +264,9 @@ const Posts = () => {
                 if(x === 0){
                     setNoPosts(true);
                 }else{
-                    setPosts(x);
+                    const slice = x.slice(offset, offset + perPage)
+                    setPosts(slice);
+                    setPageCount(Math.ceil(x.length / perPage));
                 }
             }).finally(() => {setLoading(false);});
         });
@@ -289,7 +295,7 @@ const Posts = () => {
     const validateImagePost = (file:any) =>{
         let fileNameArr =  file.name.split(".");
         let filename = fileNameArr[fileNameArr.length-1];
-        if (!(filename === "png" || filename === "jpg" || filename === "JPG" || filename === "PNG")) {
+        if (!(filename === "png" || filename === "jpg" || filename === "JPG" || filename === "PNG" || filename === "jpeg" || filename === "JPEG")) {
             setErrorImageTextPost("Solo se soportan archivos png o jpg");
             return false;
         }
@@ -313,11 +319,13 @@ const Posts = () => {
                 setPostsTypes(y);
             });
             if(x === 0){
-                console.log("no");
+                //console.log("no");
                 setNoPosts(true);
             }else{
                 setNoPosts(false);
-                setPosts(x);
+                const slice = x.slice(offset, offset + perPage)
+                setPosts(slice);
+                setPageCount(Math.ceil(x.length / perPage));
             }
         }).finally(() => {
             setLoading(false);
@@ -346,7 +354,7 @@ const Posts = () => {
         }else{
             signOff();
         }
-    }, []);
+    }, [offset]);
 
     const handleCloseInactive = () =>{
         setShowInactive(false);
@@ -356,6 +364,11 @@ const Posts = () => {
     const help = () =>{
 
     }
+
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        setOffset(selectedPage + 1)
+    };
 
     return (
         <div >
@@ -713,8 +726,25 @@ const Posts = () => {
                                                                         
                                                                     })
                                                                 }
+                                                                
                                                             </tbody>
+                                                            
                                                         </table>
+                                                        <div className="">
+                                                            <ReactPaginate
+                                                                previousLabel={"<"}
+                                                                nextLabel={">"}
+                                                                breakLabel={"..."}
+                                                                breakClassName={"break-me"}
+                                                                pageCount={pageCount}
+                                                                marginPagesDisplayed={2}
+                                                                pageRangeDisplayed={5}
+                                                                onPageChange={handlePageClick}
+                                                                containerClassName={"pagination"}
+                                                                subContainerClassName={"pages pagination"}
+                                                                activeClassName={"active"}
+                                                             />
+                                                        </div>
     
                                                     </div>
                                                 </div>

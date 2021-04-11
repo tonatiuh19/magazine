@@ -247,7 +247,7 @@ const NewProfile = () => {
                             </div>
                             <div className="mb-3">
                                 <div className="form-check">
-                                    <label className="form-check-label text-muted" >Al enviar acepto <a href="">Terminos y condiciones</a> y <a href="">Politicas de privacidad.</a></label>
+                                    <label className="form-check-label text-muted" >Al enviar acepto <Link to="/terminosycondiciones">Terminos y condiciones</Link> y <Link to="/avisodeprivacidad">Politicas de privacidad.</Link></label>
                                 </div>
                             </div>
                           

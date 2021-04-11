@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import './styles/login.css';
 import {signIn} from '../../apiFunctions/apiFunctions';
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Loading from '../../resources/Loading/Loading';
 
 const Login = (props:any) => {
@@ -67,10 +67,6 @@ const Login = (props:any) => {
         session();
     }, []);
 
-    const newCreative = (e:any) =>{
-        e.preventDefault();
-        history.push("holaCreativo/");
-    }
 
     return (
         <div className="container">
@@ -89,7 +85,7 @@ const Login = (props:any) => {
                         </div>
                         
                         <p className="forgot-password text-end">
-                            <a href="" onClick={(e) => newCreative(e)}>Quiero empezar a publicar</a>
+                            <Link to="/holaCreativo">Quiero empezar a publicar</Link>
                         </p>
                         {loading ?
                         (<Loading></Loading>)

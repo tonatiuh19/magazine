@@ -21,7 +21,8 @@ const Main = () => {
     return (
         <div>
             {loading ? (<Loading></Loading>) 
-            : (<><div className="col-sm-12 bg-dark">
+            : (<>
+            <div className="col-sm-12 bg-dark">
                 <div className="row row-cols-1 row-cols-md-4 g-3 p-5 justify-content-center">
                     {postsHeader.map((x:any, index:number)=>{
                         return (<div className="col" key={index}>
