@@ -92,6 +92,10 @@ const Post = (props:any) => {
         history.push("/"+removeAccents(decode_utf8(post[0].name.replace(/\s/g, '')).toLowerCase())+"/");
     }
 
+    /*const renderMeta = () =>{
+        document.querySelector('meta[name="description"]').setAttribute("content", "");
+    }*/
+
     return (
         <div>
             {loading ? (
@@ -104,6 +108,7 @@ const Post = (props:any) => {
             </div>
             ) 
             : (<>
+
             <Helmet>
                 <meta property="og:url"                content={window.location.href} />
                 <meta property="og:type"               content="article" />
