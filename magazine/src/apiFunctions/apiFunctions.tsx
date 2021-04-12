@@ -427,6 +427,20 @@ export const getPostsHeader = async () =>{
     }
 };
 
+export const getLastPost = async () =>{
+    try {
+        const response = await axios.post(server+'getLastPost.php',{}
+        );
+        if(response.data === 0){
+            return 0;
+        }else{
+            return response.data;
+        }
+    } catch (e) {
+        return `😱 Request failed: ${e}`;
+    }
+};
+
 export const getMainPostsbyType = async (type:number) =>{
     try {
         const response = await axios.post(server+'getMainPostsbyType.php',
